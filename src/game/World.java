@@ -7,14 +7,16 @@ import java.util.List;
  * Created by Pontus on 2017-12-06.
  */
 public class World {
-    private final int WIDTH = 800;
-    private final int HEIGHT = 600;
+    private final int WIDTH = 1920;
+    private final int HEIGHT = 1080;
 
+    private Aeroplane aeroplane;
     private List<TerrainSegment> terrain;
 
     public World() {
         this.terrain = new ArrayList<>();
         createGround();
+        aeroplane = new Aeroplane(100, terrain.get(0).getY1() - 45);
     }
 
     public void update(double dTime) {
@@ -23,6 +25,10 @@ public class World {
 
     public List<TerrainSegment> getTerrain() {
         return terrain;
+    }
+
+    public Aeroplane getAeroplane() {
+        return aeroplane;
     }
 
     public void terrainCollision() {

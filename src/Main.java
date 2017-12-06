@@ -22,7 +22,7 @@ public class Main {
     }
 
     public void run() {
-        System.out.println("Starting simulation.");
+        System.out.println("Starting game.");
         renderer.start();
         lastTime = System.currentTimeMillis();
         new Timer(5, (event) -> update()).start();
