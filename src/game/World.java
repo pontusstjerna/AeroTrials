@@ -7,6 +7,8 @@ import java.util.List;
  * Created by Pontus on 2017-12-06.
  */
 public class World {
+    public static final int ONE_METER = (int)(Aeroplane.WIDTH / 7.12);
+
     private final int WIDTH = 1920;
     private final int HEIGHT = 1080;
 
@@ -16,10 +18,11 @@ public class World {
     public World() {
         this.terrain = new ArrayList<>();
         createGround();
-        aeroplane = new Aeroplane(100, terrain.get(0).getY1() - 45);
+        aeroplane = new Aeroplane(Aeroplane.WIDTH / 2, terrain.get(0).getY1() - 45);
     }
 
     public void update(double dTime) {
+        aeroplane.update(dTime);
         terrainCollision();
     }
 
@@ -32,22 +35,9 @@ public class World {
     }
 
     public void terrainCollision() {
-//        for (TerrainSegment segment : terrain) {
-//            for (Creature c : creatures) {
-//                // TODO: Fix
-//                if (c.getHead().getPosition().getY() + c.getHead().getRadius() > HEIGHT - 100) {
-//                    // Kill
-//                    c.getHead().addForce(new Point(0, -c.getHead().getForce().getY() * 2));
-//
-//                }
-//
-//                for (Bone b : c.getBones()) {
-//                    if (b.getSnd().getPosition().getY() + b.getSnd().getRadius() > HEIGHT - 100) {
-//                        b.getSnd().addForce(new Point(0, -b.getSnd().getForce().getY() * 2));
-//                    }
-//                }
-//            }
-//        }
+        for (TerrainSegment segment : terrain) {
+
+        }
     }
 
     private void createGround() {

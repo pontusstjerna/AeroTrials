@@ -7,6 +7,7 @@ import util.ImageHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 /**
@@ -28,7 +29,7 @@ public class Renderer {
         this.world = world;
     }
 
-    public void start() {
+    public void start(KeyListener keyListener) {
         aeroplaneImage = ImageHandler.scaleImage(ImageHandler.loadImage("aeroplane_static"), scale);
 
         JFrame frame = new JFrame("AeroTrials");
@@ -44,6 +45,7 @@ public class Renderer {
         };
         surface.setFocusable(true);
         surface.setBackground(Color.black);
+        surface.addKeyListener(keyListener);
 
         frame.add(surface);
         frame.setVisible(true);
