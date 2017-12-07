@@ -121,12 +121,23 @@ public class Aeroplane {
         if (collisionPoints[0].isColliding() && collisionPoints[1].isColliding()) {
             rotation = onGroundRotation;
             torque = 0;
-            velocity.add(0, Math.min(-velocity.getY(), 0));
+
+            Vector slopeNormal = collisionPoints[0].getIntersectingSegment().getNormal();
+            Vector slope = collisionPoints[0].getIntersectingSegment().getSlope();
+            double normalForceLength = Vector.dot(velocity, slopeNormal);
+
+            velocity.add(slopeNormal.mul(-normalForceLength));
             adjustToTerrain(collisionPoints[0]);
-            adjustToTerrain(collisionPoints[1]);
         } else if (collisionPoints[0].isColliding()) {
             torque = -0.017;
             velocity.add(0, Math.min(-velocity.getY(), 0));
+
+
+            Vector slopeNormal = collisionPoints[0].getIntersectingSegment().getNormal();
+            Vector slope = collisionPoints[0].getIntersectingSegment().getSlope();
+            double normalForceLength = Vector.dot(velocity, slopeNormal);
+
+            velocity.add(slopeNormal.mul(-normalForceLength));
             adjustToTerrain(collisionPoints[0]);
         } else if (collisionPoints[1].isColliding()) {
             torque = 0.017;
@@ -155,9 +166,9 @@ public class Aeroplane {
     }
 
     private void adjustToTerrain(CollisionPoint pointOfCollision) {
-        this.x = pointOfCollision.getIntersection().getX() + pointOfCollision.getNormalOfIntersection().getX() * 5 -
+        this.x = pointOfCollision.getIntersection().getX() + pointOfCollision.getIntersectingSegment().getNormal().getX() * 5 -
             pointOfCollision.offsetX * Math.cos(rotation) + pointOfCollision.offsetY * Math.sin(rotation);
-        this.y = pointOfCollision.getIntersection().getY() + pointOfCollision.getNormalOfIntersection().getY() * 5 -
+        this.y = pointOfCollision.getIntersection().getY() + pointOfCollision.getIntersectingSegment().getNormal().getY() * 5 -
             pointOfCollision.offsetX * Math.sin(rotation) - pointOfCollision.offsetY * Math.cos(rotation);
     }
 }

@@ -7,7 +7,7 @@ public class CollisionPoint {
     public final String description;
 
     private Vector intersection;
-    private Vector normalOfIntersection;
+    private TerrainSegment segment;
     private double x,y;
 
     public CollisionPoint(int offsetX, int offsetY, String description) {
@@ -31,17 +31,17 @@ public class CollisionPoint {
         return y;
     }
 
-    public void setCollision(Vector intersection, Vector normalOfIntersection) {
+    public void setCollision(Vector intersection, TerrainSegment segment) {
         this.intersection = intersection;
-        this.normalOfIntersection = normalOfIntersection;
+        this.segment = segment;
     }
 
     public Vector getIntersection() {
         return intersection;
     }
 
-    public Vector getNormalOfIntersection() {
-        return normalOfIntersection;
+    public TerrainSegment getIntersectingSegment() {
+        return segment;
     }
 
     public boolean isColliding() {

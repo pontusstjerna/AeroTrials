@@ -85,4 +85,8 @@ public class Vector {
         }
         return new Vector(x / length, y / length);
     }
+
+    public static double dot(Vector a, Vector b) {
+        return a.x * b.x + a.y * b.y;
+    }
 }

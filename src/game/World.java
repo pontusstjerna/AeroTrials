@@ -22,9 +22,9 @@ public class World {
 
     public World() {
         terrain = new ArrayList<>();
+        random = new Random();
         createGround();
         aeroplane = new Aeroplane(500, terrain.get(0).getY1() - 100);
-        random = new Random();
     }
 
     public void update(double dTime) {
@@ -49,7 +49,7 @@ public class World {
             for (TerrainSegment segment : terrain) {
                 Vector maybeIntersection = segment.intersects(cp.getX(), cp.getY(), 10);
                 if (maybeIntersection != null) {
-                    cp.setCollision(maybeIntersection, segment.getNormal());
+                    cp.setCollision(maybeIntersection, segment);
                     break;
                 } else {
                     cp.setCollision(null, null);
@@ -65,12 +65,13 @@ public class World {
                 last.getX2(),
                 last.getY2(),
                 last.getX2() + newLength,
-                last.getY2()));
+                last.getY2() - 200 + random.nextInt(400)));
     }
 
     private void createGround() {
         terrain.add(new TerrainSegment(0, HEIGHT - 50, WIDTH, HEIGHT - 50));
-        terrain.add(new TerrainSegment(WIDTH, HEIGHT - 50, WIDTH * 2, HEIGHT - 50));
-        terrain.add(new TerrainSegment(WIDTH * 2, HEIGHT - 50, WIDTH * 3, HEIGHT - 50));
+        for (int i = 0; i < 50; i++) {
+            generateTerrain();
+        }
     }
 }
