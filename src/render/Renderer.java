@@ -1,6 +1,7 @@
 package render;
 
 import game.Aeroplane;
+import game.CollisionPoint;
 import game.TerrainSegment;
 import game.World;
 import util.ImageHandler;
@@ -61,6 +62,7 @@ public class Renderer {
         g.fillRect(0,0,WIDTH, HEIGHT);
         renderTerrain(g);
         renderAeroplane(g);
+        renderCollisionPoints(g);
     }
 
     private void configGraphics(Graphics2D g) {
@@ -72,12 +74,26 @@ public class Renderer {
 
     private void renderAeroplane(Graphics2D g) {
         Aeroplane aeroplane = world.getAeroplane();
-        int topLeftX = (int)((planeX - (Aeroplane.WIDTH / 2) * scale));
-        int topLeftY = (int)((planeY - (Aeroplane.HEIGHT / 2) * scale));
+        int topLeftX = (int)((planeX - (Aeroplane.CG_X) * scale));
+        int topLeftY = (int)((planeY - (Aeroplane.CG_Y) * scale));
         g.rotate(aeroplane.getRotation(), (int)(planeX), (int)(planeY));
         g.drawImage(aeroplaneImage, topLeftX, topLeftY, surface);
         g.rotate(-aeroplane.getRotation(), (int)(planeX), (int)(planeY));
-        g.setColor(Color.RED);
+    }
+
+    private void renderCollisionPoints(Graphics2D g) {
+        Aeroplane aeroplane = world.getAeroplane();
+        for (CollisionPoint cp : aeroplane.getCollisionPoints()) {
+            if (cp.isColliding()) {
+                g.setColor(Color.RED);
+            } else {
+                g.setColor(Color.GREEN);
+            }
+            g.fillRoundRect(
+                    (int)((cp.getX() - aeroplane.getX()) * scale + planeX - 5),
+                    (int)((cp.getY() - aeroplane.getY()) * scale + planeY - 5),
+                    10, 10, 10, 10);
+        }
     }
 
     private void renderTerrain(Graphics2D g) {

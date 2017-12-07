@@ -18,7 +18,7 @@ public class World {
     public World() {
         this.terrain = new ArrayList<>();
         createGround();
-        aeroplane = new Aeroplane(Aeroplane.WIDTH / 2, terrain.get(0).getY1() - 45);
+        aeroplane = new Aeroplane(500, terrain.get(0).getY1() - 80);
     }
 
     public void update(double dTime) {
@@ -36,7 +36,13 @@ public class World {
 
     public void terrainCollision() {
         for (TerrainSegment segment : terrain) {
-
+            for (CollisionPoint cp : aeroplane.getCollisionPoints()) {
+                if (segment.intersects(cp.getX(), cp.getY(), 5)) {
+                    cp.setColliding(true);
+                } else {
+                    cp.setColliding(false);
+                }
+            }
         }
     }
 
