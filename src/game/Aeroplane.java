@@ -1,5 +1,7 @@
 package game;
 
+import util.Vector;
+
 /**
  * Created by Pontus on 2017-12-06.
  */
@@ -9,13 +11,12 @@ public class Aeroplane {
     public static final int CG_X = 187;
     public static final int CG_Y = 56;
 
-    private final int MAX_ACCELERATION = 100 * World.ONE_METER; // meter / sec^2
+    private final int MAX_ACCELERATION = 5; // meter / sec^2
     private final double onGroundRotation = -0.16;
     private final CollisionPoint[] collisionPoints;
 
     private double x,y;
-    private double forceX, forceY;
-    private double acceleration;
+    private Vector force;
     private double rotation = 0;
     private double torque = 0; // rads / sec
     private double throttle; // between 0 and 1
@@ -24,6 +25,7 @@ public class Aeroplane {
     public Aeroplane(int x, int y) {
         this.x = x;
         this.y = y;
+        force = new Vector(0, 0);
 
         collisionPoints = new CollisionPoint[] {
                 new CollisionPoint(202, 102, "main wheels").update(x, y, 0),
@@ -41,8 +43,8 @@ public class Aeroplane {
 
         checkCollisions();
 
-        this.x += forceX * dTime;
-        this.y += forceY * dTime;
+        this.x += force.getX() * dTime * World.ONE_METER;
+        this.y += force.getY() * dTime * World.ONE_METER;
 
         rotation = (rotation + torque) % (Math.PI * 2);
 
@@ -68,7 +70,7 @@ public class Aeroplane {
     }
 
     public double getSpeed() {
-        return acceleration;
+        return force.getLength() / World.ONE_METER;
     }
 
     public double getThrottle() {
@@ -101,14 +103,13 @@ public class Aeroplane {
 
     private void adjustForces(double dTime) {
         // TODO: Air resistance!
-        acceleration += throttle * MAX_ACCELERATION * dTime;
-        if (throttle > 0) {
-            acceleration -= 0.5 * dTime;
-        }
-        forceX += acceleration * Math.cos(rotation);
-        forceY += acceleration * Math.sin(rotation);
+        double acceleration = throttle * MAX_ACCELERATION;
 
-        forceY += 9.81;
+        force.add(acceleration * Math.cos(rotation), acceleration * Math.sin(rotation));
+
+        force.add(0, 9.81);
+
+        applyDrag();
     }
 
     private void checkCollisions() {
@@ -117,13 +118,23 @@ public class Aeroplane {
         if (collisionPoints[0].isColliding() && collisionPoints[1].isColliding()) {
             rotation = onGroundRotation;
             torque = 0;
-            forceY = 0;
+            force.add(0, -force.getY() * 1.01);
         } else if (collisionPoints[0].isColliding()) {
             torque = -0.017;
-            forceY = 0;
+            force.add(0, -force.getY() * 1.01);
         } else if (collisionPoints[1].isColliding()) {
             torque = 0.017;
-            forceY = 0;
+            force.add(0, -force.getY() * 1.01);
         }
+    }
+
+    private void applyDrag() {
+        // From: https://en.wikipedia.org/wiki/Drag_(physics)
+        final double p = 1.2;
+        final double v = force.getLength();
+        final double C_D = 0.04;
+        final double A = 3; // Propeller area
+        final double F_D = 0.5 * p * v * v * C_D * A;
+        force.add(force.getUnitVector().mul(-F_D));
     }
 }

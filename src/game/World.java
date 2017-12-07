@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Pontus on 2017-12-06.
@@ -15,13 +16,20 @@ public class World {
     private Aeroplane aeroplane;
     private List<TerrainSegment> terrain;
 
+    private Random random;
+
     public World() {
-        this.terrain = new ArrayList<>();
+        terrain = new ArrayList<>();
         createGround();
         aeroplane = new Aeroplane(500, terrain.get(0).getY1() - 80);
+        random = new Random();
     }
 
     public void update(double dTime) {
+        if (aeroplane.getX() > terrain.get(terrain.size() - 2).getX1()) {
+            generateTerrain();
+        }
+
         aeroplane.update(dTime);
         terrainCollision();
     }
@@ -35,10 +43,11 @@ public class World {
     }
 
     public void terrainCollision() {
-        for (TerrainSegment segment : terrain) {
-            for (CollisionPoint cp : aeroplane.getCollisionPoints()) {
+        for (CollisionPoint cp : aeroplane.getCollisionPoints()) {
+            for (TerrainSegment segment : terrain) {
                 if (segment.intersects(cp.getX(), cp.getY(), 5)) {
                     cp.setColliding(true);
+                    break;
                 } else {
                     cp.setColliding(false);
                 }
@@ -46,7 +55,19 @@ public class World {
         }
     }
 
+    private void generateTerrain() {
+        int newLength = 500;
+        TerrainSegment last = terrain.get(terrain.size() - 1);
+        terrain.add(new TerrainSegment(
+                last.getX2(),
+                last.getY2(),
+                last.getX2() + newLength,
+                last.getY2()));
+    }
+
     private void createGround() {
         terrain.add(new TerrainSegment(0, HEIGHT - 50, WIDTH, HEIGHT - 50));
+        terrain.add(new TerrainSegment(WIDTH, HEIGHT - 50, WIDTH * 2, HEIGHT - 50));
+        terrain.add(new TerrainSegment(WIDTH * 2, HEIGHT - 50, WIDTH * 3, HEIGHT - 50));
     }
 }

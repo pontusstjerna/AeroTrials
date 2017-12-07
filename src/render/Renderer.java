@@ -63,6 +63,7 @@ public class Renderer {
         renderTerrain(g);
         renderAeroplane(g);
         renderCollisionPoints(g);
+        renderStats(g);
     }
 
     private void configGraphics(Graphics2D g) {
@@ -107,5 +108,13 @@ public class Renderer {
                     (int)((segment.getY2() - aeroplane.getY()) * scale + planeY)
             );
         }
+    }
+
+    private void renderStats(Graphics2D g) {
+        Aeroplane aeroplane = world.getAeroplane();
+
+        g.setColor(Color.WHITE);
+        g.drawString("Speed: " + (int)aeroplane.getSpeed(), 10, 20);
+        g.drawString("Throttle: " + (int)(aeroplane.getThrottle() * 100) + "%", 10, 35);
     }
 }
