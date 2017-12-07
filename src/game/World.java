@@ -1,5 +1,7 @@
 package game;
 
+import util.Vector;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -45,11 +47,12 @@ public class World {
     public void terrainCollision() {
         for (CollisionPoint cp : aeroplane.getCollisionPoints()) {
             for (TerrainSegment segment : terrain) {
-                if (segment.intersects(cp.getX(), cp.getY(), 5)) {
-                    cp.setColliding(true);
+                Vector maybeIntersection = segment.intersects(cp.getX(), cp.getY(), 10);
+                if (maybeIntersection != null) {
+                    cp.setCollision(maybeIntersection, segment.getNormal());
                     break;
                 } else {
-                    cp.setColliding(false);
+                    cp.setCollision(null, null);
                 }
             }
         }

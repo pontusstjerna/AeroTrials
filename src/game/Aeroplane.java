@@ -11,7 +11,7 @@ public class Aeroplane {
     public static final int CG_X = 187;
     public static final int CG_Y = 56;
 
-    private final int MAX_FORCE = 600; // newtons
+    private final int MAX_FORCE = 300; // newtons
     private final double MAX_ACC = 0.8;
     private final double onGroundRotation = -0.16;
     private final CollisionPoint[] collisionPoints;
@@ -41,10 +41,11 @@ public class Aeroplane {
     }
 
     public void update(double dTime) {
+        adjustElevator(dTime);
         adjustSpeed(dTime);
         adjustForces();
+        applyDrag(dTime);
         checkCollisions();
-        applyDrag();
 
         velocity.add(acceleration.mul(dTime));
 
@@ -111,7 +112,7 @@ public class Aeroplane {
 
         acceleration.add(newtons * Math.cos(rotation), newtons * Math.sin(rotation));
 
-        acceleration.add(0, 9.81);
+        acceleration.add(0, 9.81 * 10 - getSpeed() * 5);
     }
 
     private void checkCollisions() {
@@ -120,26 +121,43 @@ public class Aeroplane {
         if (collisionPoints[0].isColliding() && collisionPoints[1].isColliding()) {
             rotation = onGroundRotation;
             torque = 0;
-            velocity.add(0, -velocity.getY() * 1.01);
+            velocity.add(0, Math.min(-velocity.getY(), 0));
+            adjustToTerrain(collisionPoints[0]);
+            adjustToTerrain(collisionPoints[1]);
         } else if (collisionPoints[0].isColliding()) {
             torque = -0.017;
-            velocity.add(0, -velocity.getY() * 1.01);
+            velocity.add(0, Math.min(-velocity.getY(), 0));
+            adjustToTerrain(collisionPoints[0]);
         } else if (collisionPoints[1].isColliding()) {
             torque = 0.017;
-            velocity.add(0, -velocity.getY() * 1.01);
+            velocity.add(0, Math.min(0, -velocity.getY()));
+            adjustToTerrain(collisionPoints[1]);
+        } else {
+            torque *= -0.7;
         }
     }
 
-    private void applyDrag() {
+    private void adjustElevator(double dTime) {
+        // Stabilize
+        torque = ((1 + rotation) * getSpeed() * 0.1 +
+                ((-Math.PI + rotation) * 10/Math.max(getSpeed(), 10))) * dTime;
+    }
+
+    private void applyDrag(double dTime) {
         // From: https://en.wikipedia.org/wiki/Drag_(physics)
         final double p = 1.2;
         final double v = velocity.getLength();
         final double C_D = 0.04;
         final double A = 3.14; // Propeller area
-        final double F_D = 0.5 * p * v * v * C_D * A;
+        final double F_D = 0.5 * p * v * v * C_D * A * dTime;
         Vector airResistance = velocity.getUnitVector().mul(-F_D);
-        acceleration.add(airResistance);
+        velocity.add(airResistance);
+    }
 
-        System.out.println("Drag force: " + F_D);
+    private void adjustToTerrain(CollisionPoint pointOfCollision) {
+        this.x = pointOfCollision.getIntersection().getX() + pointOfCollision.getNormalOfIntersection().getX() * 5 -
+            pointOfCollision.offsetX * Math.cos(rotation) + pointOfCollision.offsetY * Math.sin(rotation);
+        this.y = pointOfCollision.getIntersection().getY() + pointOfCollision.getNormalOfIntersection().getY() * 5 -
+            pointOfCollision.offsetX * Math.sin(rotation) - pointOfCollision.offsetY * Math.cos(rotation);
     }
 }

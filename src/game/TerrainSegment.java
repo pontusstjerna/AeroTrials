@@ -33,7 +33,15 @@ public class TerrainSegment {
         return snd.getFloorY();
     }
 
-    public boolean intersects(double x, double y, double length) {
+    public Vector getNormal() {
+        return normal;
+    }
+
+    public Vector getSlope() {
+        return slope;
+    }
+
+    public Vector intersects(double x, double y, double length) {
         //A vector is wheel, b is slope
         double p0_y = y + normal.getY() * length;
         double p1_x = x - normal.getX() * length;
@@ -52,6 +60,10 @@ public class TerrainSegment {
         double s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y);
         double t = (s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y);
 
-        return (s >= 0 && s <= 1 && t >= 0 && t <= 1);
+        if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
+        {
+            return new Vector(p0_x + (t * s1_x), p0_y + (t * s1_y));
+        }
+        else return null;
     }
 }

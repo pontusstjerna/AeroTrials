@@ -1,10 +1,13 @@
 package game;
 
+import util.Vector;
+
 public class CollisionPoint {
     public final int offsetX, offsetY;
     public final String description;
 
-    private boolean isColliding = false;
+    private Vector intersection;
+    private Vector normalOfIntersection;
     private double x,y;
 
     public CollisionPoint(int offsetX, int offsetY, String description) {
@@ -28,11 +31,20 @@ public class CollisionPoint {
         return y;
     }
 
-    public void setColliding(boolean isColliding) {
-        this.isColliding = isColliding;
+    public void setCollision(Vector intersection, Vector normalOfIntersection) {
+        this.intersection = intersection;
+        this.normalOfIntersection = normalOfIntersection;
+    }
+
+    public Vector getIntersection() {
+        return intersection;
+    }
+
+    public Vector getNormalOfIntersection() {
+        return normalOfIntersection;
     }
 
     public boolean isColliding() {
-        return isColliding;
+        return intersection != null;
     }
 }

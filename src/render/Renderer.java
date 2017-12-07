@@ -15,16 +15,16 @@ import java.awt.image.BufferedImage;
  * Created by Pontus on 2017-12-06.
  */
 public class Renderer {
-    private final int WIDTH = 1920;
-    private final int HEIGHT = 1080;
+    private final int WIDTH = 960;
+    private final int HEIGHT = 540;
 
     private JPanel surface;
     private World world;
     private BufferedImage aeroplaneImage;
 
-    private double scale = 0.5;
-    private double planeX = WIDTH * scale * 0.5;
-    private double planeY = HEIGHT * scale * 0.7;
+    private double scale = 0.3;
+    private double planeX = WIDTH * 0.5;
+    private double planeY = HEIGHT * 0.5;
 
     public Renderer(World world) {
         this.world = world;
@@ -34,7 +34,7 @@ public class Renderer {
         aeroplaneImage = ImageHandler.scaleImage(ImageHandler.loadImage("aeroplane_static"), scale);
 
         JFrame frame = new JFrame("AeroTrials");
-        frame.setSize((int)(WIDTH * scale), (int)(HEIGHT * scale));
+        frame.setSize((int)(WIDTH), (int)(HEIGHT));
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,7 +62,7 @@ public class Renderer {
         g.fillRect(0,0,WIDTH, HEIGHT);
         renderTerrain(g);
         renderAeroplane(g);
-        renderCollisionPoints(g);
+       // renderCollisionPoints(g);
         renderStats(g);
     }
 
@@ -125,5 +125,7 @@ public class Renderer {
                 (int)(aeroplane.getSpeed() * 3.6) + " km/h)",
                 10, 20);
         g.drawString("Throttle: " + (int)(aeroplane.getThrottle() * 100) + "%", 10, 35);
+        g.drawString("Altitude: " + (int)(-aeroplane.getY() / World.ONE_METER) + " m", 10, 50);
+        g.drawString("Score: " + (int)(aeroplane.getX() / World.ONE_METER) + " m", 10, 65);
     }
 }
