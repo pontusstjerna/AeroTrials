@@ -45,9 +45,9 @@ public class Aeroplane {
         adjustSpeed(dTime);
         adjustForces();
         applyDrag(dTime);
-        checkCollisions();
 
         velocity.add(acceleration.mul(dTime));
+        checkCollisions();
 
         x += velocity.getX() * dTime * World.ONE_METER;
         y += velocity.getY() * dTime * World.ONE_METER;
@@ -120,28 +120,29 @@ public class Aeroplane {
 
         if (collisionPoints[0].isColliding() && collisionPoints[1].isColliding()) {
             rotation = onGroundRotation;
-            torque = 0;
 
-            Vector slopeNormal = collisionPoints[0].getIntersectingSegment().getNormal();
+            Vector slopeNormal = collisionPoints[0].getIntersectingSegment().getNormal().getUnitVector();
             Vector slope = collisionPoints[0].getIntersectingSegment().getSlope();
             double normalForceLength = Vector.dot(velocity, slopeNormal);
 
             velocity.add(slopeNormal.mul(-normalForceLength));
+            applyTorque(slope);
             adjustToTerrain(collisionPoints[0]);
         } else if (collisionPoints[0].isColliding()) {
-            torque = -0.017;
-            velocity.add(0, Math.min(-velocity.getY(), 0));
-
-
-            Vector slopeNormal = collisionPoints[0].getIntersectingSegment().getNormal();
+            Vector slopeNormal = collisionPoints[0].getIntersectingSegment().getNormal().getUnitVector();
             Vector slope = collisionPoints[0].getIntersectingSegment().getSlope();
             double normalForceLength = Vector.dot(velocity, slopeNormal);
 
             velocity.add(slopeNormal.mul(-normalForceLength));
+            applyTorque(slope);
             adjustToTerrain(collisionPoints[0]);
         } else if (collisionPoints[1].isColliding()) {
-            torque = 0.017;
-            velocity.add(0, Math.min(0, -velocity.getY()));
+            Vector slopeNormal = collisionPoints[1].getIntersectingSegment().getNormal().getUnitVector();
+            Vector slope = collisionPoints[1].getIntersectingSegment().getSlope();
+            double normalForceLength = Vector.dot(velocity, slopeNormal);
+
+            velocity.add(slopeNormal.mul(-normalForceLength));
+            applyTorque(slope);
             adjustToTerrain(collisionPoints[1]);
         } else {
             torque *= -0.7;
@@ -150,7 +151,7 @@ public class Aeroplane {
 
     private void adjustElevator(double dTime) {
         // Stabilize
-        torque = ((1 + rotation) * getSpeed() * 0.1 +
+        torque = ((0.5 + rotation) * getSpeed() * 0.1 +
                 ((-Math.PI + rotation) * 10/Math.max(getSpeed(), 10))) * dTime;
     }
 
@@ -163,6 +164,12 @@ public class Aeroplane {
         final double F_D = 0.5 * p * v * v * C_D * A * dTime;
         Vector airResistance = velocity.getUnitVector().mul(-F_D);
         velocity.add(airResistance);
+    }
+
+    private void applyTorque(Vector slope) {
+        // TODO
+        //double tangentialAcceleration = Vector.dot(velocity, slope);
+        //torque = -(tangentialAcceleration / 5);
     }
 
     private void adjustToTerrain(CollisionPoint pointOfCollision) {

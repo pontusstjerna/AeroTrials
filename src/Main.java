@@ -29,7 +29,7 @@ public class Main {
     }
 
     private void update() {
-        double dTime = (double)(System.currentTimeMillis() - lastTime) / 1000;
+        double dTime = Math.min((double)(System.currentTimeMillis() - lastTime) / 1000, 0.1);
         world.update(dTime);
         lastTime = System.currentTimeMillis();
         renderer.update();
