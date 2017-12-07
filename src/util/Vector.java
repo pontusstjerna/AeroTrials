@@ -80,6 +80,9 @@ public class Vector {
 
     public Vector getUnitVector() {
         double length = getLength();
+        if (length == 0) {
+            return new Vector(0, 0);
+        }
         return new Vector(x / length, y / length);
     }
 }

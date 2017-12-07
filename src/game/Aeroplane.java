@@ -11,12 +11,14 @@ public class Aeroplane {
     public static final int CG_X = 187;
     public static final int CG_Y = 56;
 
-    private final int MAX_ACCELERATION = 5; // meter / sec^2
+    private final int MAX_FORCE = 600; // newtons
+    private final double MAX_ACC = 0.8;
     private final double onGroundRotation = -0.16;
     private final CollisionPoint[] collisionPoints;
 
     private double x,y;
-    private Vector force;
+    private Vector acceleration;
+    private Vector velocity; // m/s
     private double rotation = 0;
     private double torque = 0; // rads / sec
     private double throttle; // between 0 and 1
@@ -25,7 +27,8 @@ public class Aeroplane {
     public Aeroplane(int x, int y) {
         this.x = x;
         this.y = y;
-        force = new Vector(0, 0);
+        acceleration = new Vector(0, 0);
+        velocity = new Vector(0, 0);
 
         collisionPoints = new CollisionPoint[] {
                 new CollisionPoint(202, 102, "main wheels").update(x, y, 0),
@@ -39,12 +42,14 @@ public class Aeroplane {
 
     public void update(double dTime) {
         adjustSpeed(dTime);
-        adjustForces(dTime);
-
+        adjustForces();
         checkCollisions();
+        applyDrag();
 
-        this.x += force.getX() * dTime * World.ONE_METER;
-        this.y += force.getY() * dTime * World.ONE_METER;
+        velocity.add(acceleration.mul(dTime));
+
+        x += velocity.getX() * dTime * World.ONE_METER;
+        y += velocity.getY() * dTime * World.ONE_METER;
 
         rotation = (rotation + torque) % (Math.PI * 2);
 
@@ -70,7 +75,7 @@ public class Aeroplane {
     }
 
     public double getSpeed() {
-        return force.getLength() / World.ONE_METER;
+        return velocity.getLength();
     }
 
     public double getThrottle() {
@@ -88,28 +93,25 @@ public class Aeroplane {
     private void adjustSpeed(double dTime) {
         if (accelerating) {
             if (throttle < 1) {
-                throttle += dTime;
+                throttle += MAX_ACC * dTime;
             } else {
                 throttle = 1;
             }
         } else {
             if (throttle > 0) {
-                throttle -= dTime;
+                throttle -= MAX_ACC * dTime;
             } else {
                 throttle = 0;
             }
         }
     }
 
-    private void adjustForces(double dTime) {
-        // TODO: Air resistance!
-        double acceleration = throttle * MAX_ACCELERATION;
+    private void adjustForces() {
+        double newtons = throttle * MAX_FORCE;
 
-        force.add(acceleration * Math.cos(rotation), acceleration * Math.sin(rotation));
+        acceleration.add(newtons * Math.cos(rotation), newtons * Math.sin(rotation));
 
-        force.add(0, 9.81);
-
-        applyDrag();
+        acceleration.add(0, 9.81);
     }
 
     private void checkCollisions() {
@@ -118,23 +120,26 @@ public class Aeroplane {
         if (collisionPoints[0].isColliding() && collisionPoints[1].isColliding()) {
             rotation = onGroundRotation;
             torque = 0;
-            force.add(0, -force.getY() * 1.01);
+            velocity.add(0, -velocity.getY() * 1.01);
         } else if (collisionPoints[0].isColliding()) {
             torque = -0.017;
-            force.add(0, -force.getY() * 1.01);
+            velocity.add(0, -velocity.getY() * 1.01);
         } else if (collisionPoints[1].isColliding()) {
             torque = 0.017;
-            force.add(0, -force.getY() * 1.01);
+            velocity.add(0, -velocity.getY() * 1.01);
         }
     }
 
     private void applyDrag() {
         // From: https://en.wikipedia.org/wiki/Drag_(physics)
         final double p = 1.2;
-        final double v = force.getLength();
+        final double v = velocity.getLength();
         final double C_D = 0.04;
-        final double A = 3; // Propeller area
+        final double A = 3.14; // Propeller area
         final double F_D = 0.5 * p * v * v * C_D * A;
-        force.add(force.getUnitVector().mul(-F_D));
+        Vector airResistance = velocity.getUnitVector().mul(-F_D);
+        acceleration.add(airResistance);
+
+        System.out.println("Drag force: " + F_D);
     }
 }

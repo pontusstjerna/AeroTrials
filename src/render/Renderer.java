@@ -100,7 +100,14 @@ public class Renderer {
     private void renderTerrain(Graphics2D g) {
         g.setColor(Color.WHITE);
         Aeroplane aeroplane = world.getAeroplane();
+        boolean other = true;
         for (TerrainSegment segment : world.getTerrain()) {
+            if (other) {
+                g.setColor(Color.BLACK);
+            } else {
+                g.setColor(Color.WHITE);
+            }
+            other = !other;
             g.drawLine(
                     (int)((segment.getX1() - aeroplane.getX()) * scale + planeX),
                     (int)((segment.getY1() - aeroplane.getY()) * scale + planeY),
@@ -114,7 +121,9 @@ public class Renderer {
         Aeroplane aeroplane = world.getAeroplane();
 
         g.setColor(Color.WHITE);
-        g.drawString("Speed: " + (int)aeroplane.getSpeed(), 10, 20);
+        g.drawString("Speed: " + (int)aeroplane.getSpeed() + "m/s (" +
+                (int)(aeroplane.getSpeed() * 3.6) + " km/h)",
+                10, 20);
         g.drawString("Throttle: " + (int)(aeroplane.getThrottle() * 100) + "%", 10, 35);
     }
 }

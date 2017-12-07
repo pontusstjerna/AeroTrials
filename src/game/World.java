@@ -21,7 +21,7 @@ public class World {
     public World() {
         terrain = new ArrayList<>();
         createGround();
-        aeroplane = new Aeroplane(500, terrain.get(0).getY1() - 80);
+        aeroplane = new Aeroplane(500, terrain.get(0).getY1() - 100);
         random = new Random();
     }
 
