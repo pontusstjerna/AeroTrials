@@ -31,7 +31,7 @@ public class Renderer {
     }
 
     public void start(KeyListener keyListener) {
-        aeroplaneImage = ImageHandler.scaleImage(ImageHandler.loadImage("aeroplane_static"), scale);
+        aeroplaneImage = ImageHandler.scaleImage(ImageHandler.loadImage("aeroplane_anim"), scale);
 
         JFrame frame = new JFrame("AeroTrials");
         frame.setSize((int)(WIDTH), (int)(HEIGHT));
