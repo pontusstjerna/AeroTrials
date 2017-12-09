@@ -2,6 +2,8 @@ package game;
 
 import util.Vector;
 
+import java.util.Arrays;
+
 /**
  * Created by Pontus on 2017-12-06.
  */
@@ -23,6 +25,7 @@ public class Aeroplane {
     private double torque = 0; // rads / sec
     private double throttle; // between 0 and 1
     private boolean accelerating = false;
+    private boolean engineRunning = true;
 
     public Aeroplane(int x, int y) {
         this.x = x;
@@ -45,6 +48,7 @@ public class Aeroplane {
         adjustSpeed(dTime);
         adjustForces();
         applyDrag(dTime);
+
 
         velocity.add(acceleration.mul(dTime));
         checkCollisions();
@@ -87,6 +91,10 @@ public class Aeroplane {
         return rotation;
     }
 
+    public boolean isEngineRunning() {
+        return engineRunning;
+    }
+
     public CollisionPoint[] getCollisionPoints() {
         return collisionPoints;
     }
@@ -118,41 +126,38 @@ public class Aeroplane {
     private void checkCollisions() {
         // TODO: Implement this more seriously
 
+        for (CollisionPoint cp : collisionPoints) {
+            if (cp.isColliding()) {
+                Vector slopeNormal = cp.getIntersectingSegment().getNormal().getUnitVector();
+                double normalForceLength = Vector.dot(velocity, slopeNormal);
+
+                velocity.add(slopeNormal.mul(-normalForceLength));
+
+             //   adjustToTerrain(cp);
+
+                if (cp.description.contains("prop")) {
+                    engineRunning = false;
+                }
+            }
+        }
+
         if (collisionPoints[0].isColliding() && collisionPoints[1].isColliding()) {
-            rotation = onGroundRotation;
+            torque = 0;
 
-            Vector slopeNormal = collisionPoints[0].getIntersectingSegment().getNormal().getUnitVector();
-            Vector slope = collisionPoints[0].getIntersectingSegment().getSlope();
-            double normalForceLength = Vector.dot(velocity, slopeNormal);
-
-            velocity.add(slopeNormal.mul(-normalForceLength));
-            applyTorque(slope);
-            adjustToTerrain(collisionPoints[0]);
         } else if (collisionPoints[0].isColliding()) {
-            Vector slopeNormal = collisionPoints[0].getIntersectingSegment().getNormal().getUnitVector();
-            Vector slope = collisionPoints[0].getIntersectingSegment().getSlope();
-            double normalForceLength = Vector.dot(velocity, slopeNormal);
-
-            velocity.add(slopeNormal.mul(-normalForceLength));
-            applyTorque(slope);
-            adjustToTerrain(collisionPoints[0]);
+            torque -= 0.91 * 0.0003 * Math.cos(rotation);
         } else if (collisionPoints[1].isColliding()) {
-            Vector slopeNormal = collisionPoints[1].getIntersectingSegment().getNormal().getUnitVector();
-            Vector slope = collisionPoints[1].getIntersectingSegment().getSlope();
-            double normalForceLength = Vector.dot(velocity, slopeNormal);
-
-            velocity.add(slopeNormal.mul(-normalForceLength));
-            applyTorque(slope);
-            adjustToTerrain(collisionPoints[1]);
+            torque += 0.91 * 0.003 * Math.cos(rotation);
         } else {
-            torque *= -0.7;
+            torque += 9.81 * 0.00003 * Math.cos(rotation); // Nose
         }
     }
 
     private void adjustElevator(double dTime) {
         // Stabilize
-        torque = ((0.5 + rotation) * getSpeed() * 0.1 +
-                ((-Math.PI + rotation) * 10/Math.max(getSpeed(), 10))) * dTime;
+        //torque = ((0.5 + rotation) * getSpeed() * 0.1 +
+          //      ((-Math.PI + rotation) * 10/Math.max(getSpeed(), 10))) * dTime;
+        torque *= 1 - dTime;
     }
 
     private void applyDrag(double dTime) {
@@ -166,16 +171,10 @@ public class Aeroplane {
         velocity.add(airResistance);
     }
 
-    private void applyTorque(Vector slope) {
-        // TODO
-        //double tangentialAcceleration = Vector.dot(new Vector(0, 9.81 * 10), slope);
-        //torque = -(tangentialAcceleration / 5);
-    }
-
     private void adjustToTerrain(CollisionPoint pointOfCollision) {
-        this.x = pointOfCollision.getIntersection().getX() + pointOfCollision.getIntersectingSegment().getNormal().getX() * 5 -
+        this.x = pointOfCollision.getIntersection().getX() + pointOfCollision.getIntersectingSegment().getNormal().getX() * 0 -
             pointOfCollision.offsetX * Math.cos(rotation) + pointOfCollision.offsetY * Math.sin(rotation);
-        this.y = pointOfCollision.getIntersection().getY() + pointOfCollision.getIntersectingSegment().getNormal().getY() * 5 -
+        this.y = pointOfCollision.getIntersection().getY() + pointOfCollision.getIntersectingSegment().getNormal().getY() * 0 -
             pointOfCollision.offsetX * Math.sin(rotation) - pointOfCollision.offsetY * Math.cos(rotation);
     }
 }

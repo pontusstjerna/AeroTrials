@@ -60,8 +60,11 @@ public class Renderer {
     }
 
     private void incrementFrames() {
-        int extra = (int)(world.getAeroplane().getThrottle() * 10 / 2);
-        frame = (frame + 1 + extra) % NR_FRAMES;
+        Aeroplane aeroplane = world.getAeroplane();
+        if (aeroplane.isEngineRunning()) {
+            int extra = (int)(aeroplane.getThrottle() * 10 / 2);
+            frame = (frame + 1 + extra) % NR_FRAMES;
+        }
     }
 
     private void render(Graphics2D g) {

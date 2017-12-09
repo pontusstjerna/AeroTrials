@@ -43,10 +43,10 @@ public class TerrainSegment {
 
     public Vector intersects(double x, double y, double length) {
         //A vector is wheel, b is slope
+        double p0_x = x + normal.getX() * length;
         double p0_y = y + normal.getY() * length;
         double p1_x = x - normal.getX() * length;
         double p1_y = y - normal.getY() * length;
-        double p0_x = x + normal.getX() * length;
         double p2_x = first.getX();
         double p2_y = first.getY();
         double p3_x = snd.getX();

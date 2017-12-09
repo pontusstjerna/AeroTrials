@@ -24,7 +24,7 @@ public class World {
         terrain = new ArrayList<>();
         random = new Random();
         createGround();
-        aeroplane = new Aeroplane(500, terrain.get(0).getY1() - 500);
+        aeroplane = new Aeroplane(500, terrain.get(0).getY1() - 70);
     }
 
     public void update(double dTime) {
@@ -47,7 +47,7 @@ public class World {
     public void terrainCollision() {
         for (CollisionPoint cp : aeroplane.getCollisionPoints()) {
             for (TerrainSegment segment : terrain) {
-                Vector maybeIntersection = segment.intersects(cp.getX(), cp.getY(), 10);
+                Vector maybeIntersection = segment.intersects(cp.getX(), cp.getY(), Math.max(aeroplane.getSpeed(), 1));
                 if (maybeIntersection != null) {
                     cp.setCollision(maybeIntersection, segment);
                     break;
