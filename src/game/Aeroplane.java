@@ -112,7 +112,7 @@ public class Aeroplane {
 
         acceleration.add(newtons * Math.cos(rotation), newtons * Math.sin(rotation));
 
-        acceleration.add(0, 9.81 * 10 - getSpeed() * 5);
+        acceleration.add(0, 9.81 * 10 - getSpeed() * 1);
     }
 
     private void checkCollisions() {
@@ -168,7 +168,7 @@ public class Aeroplane {
 
     private void applyTorque(Vector slope) {
         // TODO
-        //double tangentialAcceleration = Vector.dot(velocity, slope);
+        //double tangentialAcceleration = Vector.dot(new Vector(0, 9.81 * 10), slope);
         //torque = -(tangentialAcceleration / 5);
     }
 
