@@ -17,21 +17,23 @@ import java.awt.image.BufferedImage;
 public class Renderer {
     private final int WIDTH = 960;
     private final int HEIGHT = 540;
+    private final int NR_FRAMES = 21;
 
     private JPanel surface;
     private World world;
-    private BufferedImage aeroplaneImage;
+    private BufferedImage[] aeroplaneImages;
 
-    private double scale = 0.3;
+    private double scale = 0.5;
     private double planeX = WIDTH * 0.5;
     private double planeY = HEIGHT * 0.5;
+    private int frame = 0;
 
     public Renderer(World world) {
         this.world = world;
     }
 
     public void start(KeyListener keyListener) {
-        aeroplaneImage = ImageHandler.scaleImage(ImageHandler.loadImage("aeroplane_anim"), scale);
+        loadImages();
 
         JFrame frame = new JFrame("AeroTrials");
         frame.setSize((int)(WIDTH), (int)(HEIGHT));
@@ -52,13 +54,19 @@ public class Renderer {
         frame.setVisible(true);
     }
 
-    public void update() {
+    public void update(double dTime) {
+        incrementFrames();
         surface.repaint();
+    }
+
+    private void incrementFrames() {
+        int extra = (int)(world.getAeroplane().getThrottle() * 10 / 2);
+        frame = (frame + 1 + extra) % NR_FRAMES;
     }
 
     private void render(Graphics2D g) {
         configGraphics(g);
-        g.setColor(new Color(53, 53, 53));
+        g.setColor(new Color(50, 50, 50));
         g.fillRect(0,0,WIDTH, HEIGHT);
         renderTerrain(g);
         renderAeroplane(g);
@@ -70,7 +78,22 @@ public class Renderer {
         RenderingHints rh = new RenderingHints(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
+        RenderingHints rh2 = new RenderingHints(
+                RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g.setRenderingHints(rh);
+        g.setRenderingHints(rh2);
+    }
+
+    private void loadImages() {
+        System.out.println("Loading images....");
+        aeroplaneImages = new BufferedImage[NR_FRAMES];
+        BufferedImage spriteSheet = ImageHandler.loadImage("aeroplane_anim");
+        for (int i = 0; i < NR_FRAMES; i++) {
+            aeroplaneImages[i] = ImageHandler.scaleImage(
+                    ImageHandler.cutImage(spriteSheet, 0, i, Aeroplane.WIDTH, Aeroplane.HEIGHT), scale);
+        }
+        System.out.println("Images loaded!");
     }
 
     private void renderAeroplane(Graphics2D g) {
@@ -78,7 +101,7 @@ public class Renderer {
         int topLeftX = (int)((planeX - (Aeroplane.CG_X) * scale));
         int topLeftY = (int)((planeY - (Aeroplane.CG_Y) * scale));
         g.rotate(aeroplane.getRotation(), (int)(planeX), (int)(planeY));
-        g.drawImage(aeroplaneImage, topLeftX, topLeftY, surface);
+        g.drawImage(aeroplaneImages[frame], topLeftX, topLeftY, surface);
         g.rotate(-aeroplane.getRotation(), (int)(planeX), (int)(planeY));
     }
 

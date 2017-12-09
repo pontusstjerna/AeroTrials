@@ -32,6 +32,6 @@ public class Main {
         double dTime = Math.min((double)(System.currentTimeMillis() - lastTime) / 1000, 0.1);
         world.update(dTime);
         lastTime = System.currentTimeMillis();
-        renderer.update();
+        renderer.update(dTime);
     }
 }
