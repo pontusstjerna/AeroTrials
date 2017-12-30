@@ -23,7 +23,7 @@ public class Main {
 
     public void run() {
         System.out.println("Starting game.");
-        renderer.start(new InputController(world.getAeroplane()));
+        renderer.start(new InputController(world));
         lastTime = System.currentTimeMillis();
         new Timer(5, (event) -> update()).start();
     }

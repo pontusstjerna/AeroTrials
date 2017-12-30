@@ -4,16 +4,25 @@ import util.Vector;
 
 public class CollisionPoint {
     public final int offsetX, offsetY;
-    public final String description;
+    public final POINTS point;
+
+    public enum POINTS {
+        WHEEL_MAIN,
+        WHEEL_TAIL,
+        RUDDER,
+        PROP_TOP,
+        PROP_CONE,
+        PROP_BOTTOM
+    }
 
     private Vector intersection;
     private TerrainSegment segment;
     private double x,y;
 
-    public CollisionPoint(int offsetX, int offsetY, String description) {
+    public CollisionPoint(int offsetX, int offsetY, POINTS point) {
         this.offsetX = offsetX - Aeroplane.CG_X;
         this.offsetY = offsetY - Aeroplane.CG_Y;
-        this.description = description;
+        this.point = point;
     }
 
     public CollisionPoint update(double planeX, double planeY, double rotation) {

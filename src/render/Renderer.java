@@ -73,7 +73,8 @@ public class Renderer {
         g.fillRect(0,0,WIDTH, HEIGHT);
         renderTerrain(g);
         renderAeroplane(g);
-       // renderCollisionPoints(g);
+        renderCollisionPoints(g);
+        renderForces(g);
         renderStats(g);
     }
 
@@ -121,6 +122,15 @@ public class Renderer {
                     (int)((cp.getY() - aeroplane.getY()) * scale + planeY - 5),
                     10, 10, 10, 10);
         }
+    }
+
+    private void renderForces(Graphics2D g) {
+        Aeroplane aeroplane = world.getAeroplane();
+        g.setColor(Color.red);
+        g.setStroke(new BasicStroke(5));
+        g.drawLine((int)planeX, (int)planeY,
+                (int)(planeX + aeroplane.getVelocity().getX() * scale),
+                (int)(planeY + aeroplane.getVelocity().getY() * scale));
     }
 
     private void renderTerrain(Graphics2D g) {

@@ -2,8 +2,6 @@ package game;
 
 import util.Vector;
 
-import java.util.Arrays;
-
 /**
  * Created by Pontus on 2017-12-06.
  */
@@ -13,8 +11,12 @@ public class Aeroplane {
     public static final int CG_X = 187;
     public static final int CG_Y = 56;
 
-    private final int MAX_FORCE = 300; // newtons
-    private final double MAX_ACC = 0.8;
+    private final int MAX_FORCE = 200; // newtons
+    private final double MAX_ACC = 1.2;
+    private final double LIFT_FACTOR = 0.015;
+    private final double GRAVITY = 9.81 * 10;
+    private final double ANGULAR_DRAG = 0.05;
+
     private final double onGroundRotation = -0.16;
     private final CollisionPoint[] collisionPoints;
 
@@ -34,12 +36,12 @@ public class Aeroplane {
         velocity = new Vector(0, 0);
 
         collisionPoints = new CollisionPoint[] {
-                new CollisionPoint(202, 102, "main wheels").update(x, y, 0),
-                new CollisionPoint(0, 68, "tail wheel").update(x, y, 0),
-                new CollisionPoint(15, 0, "rudder").update(x, y, 0),
-                new CollisionPoint(261, 6, "prop top").update(x, y, 0),
-                new CollisionPoint(274, 49, "prop cone").update(x, y, 0),
-                new CollisionPoint(260, 95, "prop bottom").update(x, y, 0)
+                new CollisionPoint(202, 102, CollisionPoint.POINTS.WHEEL_MAIN).update(x, y, 0),
+                new CollisionPoint(0, 68, CollisionPoint.POINTS.WHEEL_TAIL).update(x, y, 0),
+                new CollisionPoint(15, 0, CollisionPoint.POINTS.RUDDER).update(x, y, 0),
+                new CollisionPoint(261, 6, CollisionPoint.POINTS.PROP_TOP).update(x, y, 0),
+                new CollisionPoint(274, 49, CollisionPoint.POINTS.PROP_CONE).update(x, y, 0),
+                new CollisionPoint(260, 95, CollisionPoint.POINTS.PROP_BOTTOM).update(x, y, 0)
         };
     }
 
@@ -47,10 +49,12 @@ public class Aeroplane {
         adjustElevator(dTime);
         adjustSpeed(dTime);
         adjustForces();
+
         applyDrag(dTime);
 
 
         velocity.add(acceleration.mul(dTime));
+        applyLift();
         checkCollisions();
 
         x += velocity.getX() * dTime * World.ONE_METER;
@@ -99,6 +103,10 @@ public class Aeroplane {
         return collisionPoints;
     }
 
+    public Vector getVelocity() {
+        return velocity;
+    }
+
     private void adjustSpeed(double dTime) {
         if (accelerating) {
             if (throttle < 1) {
@@ -120,7 +128,7 @@ public class Aeroplane {
 
         acceleration.add(newtons * Math.cos(rotation), newtons * Math.sin(rotation));
 
-        acceleration.add(0, 9.81 * 10 - getSpeed() * 1);
+        acceleration.add(0,  GRAVITY);
     }
 
     private void checkCollisions() {
@@ -131,11 +139,13 @@ public class Aeroplane {
                 Vector slopeNormal = cp.getIntersectingSegment().getNormal().getUnitVector();
                 double normalForceLength = Vector.dot(velocity, slopeNormal);
 
-                velocity.add(slopeNormal.mul(-normalForceLength));
+                if (normalForceLength < 0) {
+                    velocity.add(slopeNormal.mul(-normalForceLength));
+                }
 
              //   adjustToTerrain(cp);
 
-                if (cp.description.contains("prop")) {
+                if (cp.point.toString().contains("PROP")) {
                     engineRunning = false;
                 }
             }
@@ -145,19 +155,25 @@ public class Aeroplane {
             torque = 0;
 
         } else if (collisionPoints[0].isColliding()) {
-            torque -= 0.91 * 0.0003 * Math.cos(rotation);
+            torque -= 0.91 * 0.0003;
         } else if (collisionPoints[1].isColliding()) {
-            torque += 0.91 * 0.003 * Math.cos(rotation);
-        } else {
-            torque += 9.81 * 0.00003 * Math.cos(rotation); // Nose
+            torque += 0.91 * 0.003;
         }
     }
 
     private void adjustElevator(double dTime) {
         // Stabilize
-        //torque = ((0.5 + rotation) * getSpeed() * 0.1 +
-          //      ((-Math.PI + rotation) * 10/Math.max(getSpeed(), 10))) * dTime;
-        torque *= 1 - dTime;
+        double velRot = Math.atan2(velocity.getY(), velocity.getX());
+        double diff = rotation - velRot;
+        rotation -= ((getPI(diff)) * dTime * getSpeed() * ANGULAR_DRAG) % Math.PI * 2;
+    }
+
+    private void applyLift() {
+        Vector forward = new Vector(Math.cos(rotation), Math.sin(rotation)).getUnitVector();
+        double forwardVel = Vector.dot(velocity, forward);
+        System.out.println(forwardVel);
+        Vector lift = forward.getNormal().getUnitVector().mul(forwardVel * LIFT_FACTOR);
+        velocity.add(lift);
     }
 
     private void applyDrag(double dTime) {
@@ -176,5 +192,17 @@ public class Aeroplane {
             pointOfCollision.offsetX * Math.cos(rotation) + pointOfCollision.offsetY * Math.sin(rotation);
         this.y = pointOfCollision.getIntersection().getY() + pointOfCollision.getIntersectingSegment().getNormal().getY() * 0 -
             pointOfCollision.offsetX * Math.sin(rotation) - pointOfCollision.offsetY * Math.cos(rotation);
+    }
+
+    private double getPI(double radians) {
+        if (radians > Math.PI) {
+            return radians - Math.PI * 2;
+        }
+
+        if (radians < -Math.PI) {
+            return radians + Math.PI * 2;
+        }
+
+        return radians;
     }
 }

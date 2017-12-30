@@ -24,7 +24,7 @@ public class World {
         terrain = new ArrayList<>();
         random = new Random();
         createGround();
-        aeroplane = new Aeroplane(500, terrain.get(0).getY1() - 70);
+        aeroplane = new Aeroplane(500, HEIGHT - 120);
     }
 
     public void update(double dTime) {
@@ -47,9 +47,13 @@ public class World {
     public void terrainCollision() {
         for (CollisionPoint cp : aeroplane.getCollisionPoints()) {
             for (TerrainSegment segment : terrain) {
-                Vector maybeIntersection = segment.intersects(cp.getX(), cp.getY(), Math.max(aeroplane.getSpeed(), 1));
+                Vector maybeIntersection = segment.intersects(cp.getX(), cp.getY(), Math.max(aeroplane.getSpeed() * 0.1, 1));
                 if (maybeIntersection != null) {
                     cp.setCollision(maybeIntersection, segment);
+                    if (!cp.point.toString().contains("WHEEL") && cp.point != CollisionPoint.POINTS.PROP_BOTTOM) {
+                        reset();
+                        return;
+                    }
                     break;
                 } else {
                     cp.setCollision(null, null);
@@ -58,14 +62,25 @@ public class World {
         }
     }
 
+    public void reset() {
+        aeroplane = new Aeroplane(501, HEIGHT - 120);
+    }
+
     private void generateTerrain() {
         int newLength = 500;
         TerrainSegment last = terrain.get(terrain.size() - 1);
+        int newHeight = 200 - random.nextInt(400);
         terrain.add(new TerrainSegment(
                 last.getX2(),
                 last.getY2(),
                 last.getX2() + newLength,
-                last.getY2() - 200 + random.nextInt(400)));
+                last.getY2() - newHeight));
+
+        terrain.add(0, new TerrainSegment(
+                last.getX2(),
+                last.getY2() - 1000,
+                last.getX2() + newLength,
+                last.getY2() - newHeight - 1000));
     }
 
     private void createGround() {
