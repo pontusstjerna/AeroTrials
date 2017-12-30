@@ -12,12 +12,11 @@ public class Aeroplane {
     public static final int CG_Y = 56;
 
     private final int MAX_FORCE = 200; // newtons
-    private final double MAX_ACC = 1.2;
-    private final double LIFT_FACTOR = 0.015;
+    private final double MAX_ACC = 3;
+    private final double LIFT_FACTOR = 0.017;
     private final double GRAVITY = 9.81 * 10;
     private final double ANGULAR_DRAG = 0.05;
 
-    private final double onGroundRotation = -0.16;
     private final CollisionPoint[] collisionPoints;
 
     private double x,y;
@@ -46,6 +45,10 @@ public class Aeroplane {
     }
 
     public void update(double dTime) {
+        if (!engineRunning) {
+            accelerating = false;
+        }
+
         adjustElevator(dTime);
         adjustSpeed(dTime);
         adjustForces();
@@ -171,7 +174,6 @@ public class Aeroplane {
     private void applyLift() {
         Vector forward = new Vector(Math.cos(rotation), Math.sin(rotation)).getUnitVector();
         double forwardVel = Vector.dot(velocity, forward);
-        System.out.println(forwardVel);
         Vector lift = forward.getNormal().getUnitVector().mul(forwardVel * LIFT_FACTOR);
         velocity.add(lift);
     }

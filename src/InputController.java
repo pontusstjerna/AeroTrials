@@ -1,5 +1,6 @@
 import game.Aeroplane;
 import game.World;
+import render.UIRenderer;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -37,6 +38,9 @@ public class InputController implements KeyListener {
                 break;
             case KeyEvent.VK_SPACE:
                 world.reset();
+                break;
+            case KeyEvent.VK_P:
+                UIRenderer.DEV_MODE = !UIRenderer.DEV_MODE;
                 break;
         }
     }

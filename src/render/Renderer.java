@@ -15,17 +15,20 @@ import java.awt.image.BufferedImage;
  * Created by Pontus on 2017-12-06.
  */
 public class Renderer {
-    private final int WIDTH = 960;
-    private final int HEIGHT = 540;
+    public static final int WIDTH = 960;
+    public static final int HEIGHT = 540;
     private final int NR_FRAMES = 21;
 
     private JPanel surface;
     private World world;
-    private BufferedImage[] aeroplaneImages;
+    private UIRenderer ui;
 
-    private double scale = 0.5;
-    private double planeX = WIDTH * 0.5;
-    private double planeY = HEIGHT * 0.5;
+    private BufferedImage[] aeroplaneImages;
+    private BufferedImage background;
+
+    private final double scale = 0.5;
+    private final double planeX = WIDTH * 0.5;
+    private final double planeY = HEIGHT * 0.5;
     private int frame = 0;
 
     public Renderer(World world) {
@@ -50,6 +53,8 @@ public class Renderer {
         surface.setBackground(Color.black);
         surface.addKeyListener(keyListener);
 
+        ui = new UIRenderer(surface, scale);
+
         frame.add(surface);
         frame.setVisible(true);
     }
@@ -69,13 +74,17 @@ public class Renderer {
 
     private void render(Graphics2D g) {
         configGraphics(g);
-        g.setColor(new Color(50, 50, 50));
-        g.fillRect(0,0,WIDTH, HEIGHT);
+        renderBackground(g);
         renderTerrain(g);
         renderAeroplane(g);
-        renderCollisionPoints(g);
-        renderForces(g);
-        renderStats(g);
+
+        if (UIRenderer.DEV_MODE) {
+            renderCollisionPoints(g);
+            renderForces(g);
+            renderStats(g);
+        }
+
+        ui.render(g, world);
     }
 
     private void configGraphics(Graphics2D g) {
@@ -97,7 +106,27 @@ public class Renderer {
             aeroplaneImages[i] = ImageHandler.scaleImage(
                     ImageHandler.cutImage(spriteSheet, 0, i, Aeroplane.WIDTH, Aeroplane.HEIGHT), scale);
         }
+
+        background = ImageHandler.scaleImage(ImageHandler.loadImage("background"), scale);
+
         System.out.println("Images loaded!");
+    }
+
+    private void renderBackground(Graphics2D g) {
+        Aeroplane aeroplane = world.getAeroplane();
+        double x = (-aeroplane.getX()) * scale * 0.333;
+        double renderedWidth = background.getWidth() * scale;
+        g.drawImage(background,
+                (int)(x % renderedWidth),
+                0,
+                surface);
+
+        if ((x % renderedWidth) <= renderedWidth - WIDTH) {
+            g.drawImage(background,
+                    (int)((x % renderedWidth) + renderedWidth),
+                    0,
+                    surface);
+        }
     }
 
     private void renderAeroplane(Graphics2D g) {
@@ -134,16 +163,9 @@ public class Renderer {
     }
 
     private void renderTerrain(Graphics2D g) {
-        g.setColor(Color.WHITE);
+        g.setColor(new Color(16,16,16));
         Aeroplane aeroplane = world.getAeroplane();
-        boolean other = true;
         for (TerrainSegment segment : world.getTerrain()) {
-            if (other) {
-                g.setColor(Color.BLACK);
-            } else {
-                g.setColor(Color.WHITE);
-            }
-            other = !other;
             g.drawLine(
                     (int)((segment.getX1() - aeroplane.getX()) * scale + planeX),
                     (int)((segment.getY1() - aeroplane.getY()) * scale + planeY),
@@ -156,7 +178,7 @@ public class Renderer {
     private void renderStats(Graphics2D g) {
         Aeroplane aeroplane = world.getAeroplane();
 
-        g.setColor(Color.WHITE);
+        g.setColor(Color.RED);
         g.drawString("Speed: " + (int)aeroplane.getSpeed() + "m/s (" +
                 (int)(aeroplane.getSpeed() * 3.6) + " km/h)",
                 10, 20);
