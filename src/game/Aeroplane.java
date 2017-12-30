@@ -16,6 +16,7 @@ public class Aeroplane {
     private final double LIFT_FACTOR = 0.017;
     private final double GRAVITY = 9.81 * 10;
     private final double ANGULAR_DRAG = 0.05;
+    private final int MIN_ENGINE_START_SPEED = 2;
 
     private final CollisionPoint[] collisionPoints;
 
@@ -27,6 +28,7 @@ public class Aeroplane {
     private double throttle; // between 0 and 1
     private boolean accelerating = false;
     private boolean engineRunning = true;
+    private boolean crashed = false;
 
     public Aeroplane(int x, int y) {
         this.x = x;
@@ -45,8 +47,12 @@ public class Aeroplane {
     }
 
     public void update(double dTime) {
-        if (!engineRunning) {
+        if (!engineRunning || crashed) {
             accelerating = false;
+
+            if (getSpeed() < MIN_ENGINE_START_SPEED) {
+                engineRunning = true;
+            }
         }
 
         adjustElevator(dTime);
@@ -102,6 +108,10 @@ public class Aeroplane {
         return engineRunning;
     }
 
+    public boolean isCrashed() {
+        return crashed;
+    }
+
     public CollisionPoint[] getCollisionPoints() {
         return collisionPoints;
     }
@@ -139,6 +149,10 @@ public class Aeroplane {
 
         for (CollisionPoint cp : collisionPoints) {
             if (cp.isColliding()) {
+                if (!cp.point.toString().contains("WHEEL") && cp.point != CollisionPoint.POINTS.PROP_BOTTOM) {
+                    crashed = true;
+                }
+
                 Vector slopeNormal = cp.getIntersectingSegment().getNormal().getUnitVector();
                 double normalForceLength = Vector.dot(velocity, slopeNormal);
 
@@ -160,7 +174,7 @@ public class Aeroplane {
         } else if (collisionPoints[0].isColliding()) {
             torque -= 0.91 * 0.0003;
         } else if (collisionPoints[1].isColliding()) {
-            torque += 0.91 * 0.003;
+            torque += 0.91 * 0.0005;
         }
     }
 

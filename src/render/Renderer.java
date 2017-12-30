@@ -36,8 +36,6 @@ public class Renderer {
     }
 
     public void start(KeyListener keyListener) {
-        loadImages();
-
         JFrame frame = new JFrame("AeroTrials");
         frame.setSize((int)(WIDTH), (int)(HEIGHT));
         frame.setLocationRelativeTo(null);
@@ -54,6 +52,8 @@ public class Renderer {
         surface.addKeyListener(keyListener);
 
         ui = new UIRenderer(surface, scale);
+
+        loadImages();
 
         frame.add(surface);
         frame.setVisible(true);
@@ -108,6 +108,8 @@ public class Renderer {
         }
 
         background = ImageHandler.scaleImage(ImageHandler.loadImage("background"), scale);
+
+        ui.loadImages();
 
         System.out.println("Images loaded!");
     }

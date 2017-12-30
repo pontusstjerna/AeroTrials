@@ -50,10 +50,6 @@ public class World {
                 Vector maybeIntersection = segment.intersects(cp.getX(), cp.getY(), Math.max(aeroplane.getSpeed() * 0.1, 1));
                 if (maybeIntersection != null) {
                     cp.setCollision(maybeIntersection, segment);
-                    if (!cp.point.toString().contains("WHEEL") && cp.point != CollisionPoint.POINTS.PROP_BOTTOM) {
-                        reset();
-                        return;
-                    }
                     break;
                 } else {
                     cp.setCollision(null, null);
