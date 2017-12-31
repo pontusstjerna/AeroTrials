@@ -2,6 +2,7 @@ package render;
 
 import game.Aeroplane;
 import game.World;
+import util.EventListener;
 import util.ImageHandler;
 
 import javax.swing.*;
@@ -13,10 +14,11 @@ import java.util.Map;
 /**
  * Created by Pontus on 2017-12-30.
  */
-public class UIRenderer {
+public class UI {
     public static boolean DEV_MODE = false;
 
     private JPanel surface;
+    private EventListener eventListener;
 
     private double scale;
 
@@ -27,9 +29,10 @@ public class UIRenderer {
 
     private Map<String, BufferedImage> images;
 
-    public UIRenderer(JPanel surface, double scale) {
+    public UI(JPanel surface, double scale, EventListener eventListener) {
         this.surface = surface;
         this.scale = scale;
+        this.eventListener = eventListener;
 
         scoreFont = new Font("Quartz", Font.PLAIN, 25);
         descriptionFont = new Font("Quartz", Font.PLAIN, 16);
@@ -95,11 +98,11 @@ public class UIRenderer {
                     g,
                     "Your score: " + aeroplane.getCrash().score,
                     crashRect.x,
-                    (int)(crashRect.y + crashRect.height),
+                    crashRect.y + crashRect.height,
                     crashRect.width,
                     scoreFont
                     );
-
+            eventListener.pause();
         }
     }
 

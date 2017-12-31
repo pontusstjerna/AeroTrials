@@ -1,5 +1,6 @@
 import game.World;
 import render.Renderer;
+import util.EventListener;
 
 import javax.swing.*;
 
@@ -7,13 +8,16 @@ import javax.swing.*;
 /**
  * Created by Pontus on 2017-12-06.
  */
-public class Main {
+public class Main implements EventListener {
     private Renderer renderer;
     private World world;
 
-    private long lastTime = 0;
+    private Timer timer;
 
-    public static void main(String[] args ) { new Main().run(); }
+    private long lastTime = 0;
+    private boolean isPaused = true;
+
+    public static void main(String[] args ) { new Main().start(); }
 
     public Main() {
         System.setProperty("sun.java2d.opengl", "true");
@@ -21,11 +25,40 @@ public class Main {
         renderer = new Renderer(world);
     }
 
-    public void run() {
+    @Override
+    public void start() {
         System.out.println("Starting game.");
-        renderer.start(new InputController(world));
+        renderer.start(new InputController(world, this), this);
+        timer = new Timer(5, (event) -> update());
+        run();
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Running game.");
         lastTime = System.currentTimeMillis();
-        new Timer(5, (event) -> update()).start();
+        timer.start();
+        isPaused = false;
+    }
+
+    @Override
+    public void pause() {
+        timer.stop();
+        isPaused = true;
+        System.out.println("Pausing game.");
+    }
+
+    @Override
+    public void quit() {
+        pause();
+        renderer.quit();
+        System.out.println("Quitting game.");
+        System.exit(0);
+    }
+
+    @Override
+    public boolean isPaused() {
+        return isPaused;
     }
 
     private void update() {

@@ -14,9 +14,9 @@ public class World {
 
     private final int WIDTH = 1920;
     private final int HEIGHT = 1080;
-    private final double DIFFICULTY = 0.05;
-    private final int INIT_CLEARANCE = 1300;
-    private final int MIN_CLEARANCE = 100;
+    private final double DIFFICULTY = 0.02;
+    private final int INIT_CLEARANCE = 1000;
+    private final int MIN_CLEARANCE = 230;
 
     private Aeroplane aeroplane;
     private List<TerrainSegment> terrain;
@@ -77,9 +77,9 @@ public class World {
 
         terrain.add(0, new TerrainSegment(
                 last.getX2(),
-                last.getY2() - INIT_CLEARANCE + Math.min((int)(last.getX2() * DIFFICULTY), MIN_CLEARANCE),
+                last.getY2() - Math.max((int)(INIT_CLEARANCE - last.getX1() * DIFFICULTY), MIN_CLEARANCE),
                 last.getX2() + newLength,
-                last.getY2() - newHeight - INIT_CLEARANCE + Math.min((int)(last.getX2() * DIFFICULTY), MIN_CLEARANCE)));
+                last.getY2() - newHeight - Math.max((int)(INIT_CLEARANCE - last.getX2() * DIFFICULTY), MIN_CLEARANCE)));
     }
 
     private void createGround() {

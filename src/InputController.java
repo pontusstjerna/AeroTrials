@@ -1,15 +1,18 @@
 import game.Aeroplane;
 import game.World;
-import render.UIRenderer;
+import render.UI;
+import util.EventListener;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class InputController implements KeyListener {
     private World world;
+    private EventListener eventListener;
 
-    InputController(World world) {
+    InputController(World world, EventListener eventListener) {
         this.world = world;
+        this.eventListener = eventListener;
     }
 
     @Override
@@ -37,11 +40,21 @@ public class InputController implements KeyListener {
                 aeroplane.release();
                 break;
             case KeyEvent.VK_SPACE:
+                eventListener.run();
                 world.reset();
                 break;
-            case KeyEvent.VK_P:
-                UIRenderer.DEV_MODE = !UIRenderer.DEV_MODE;
+            case KeyEvent.VK_0:
+                UI.DEV_MODE = !UI.DEV_MODE;
                 break;
+            case KeyEvent.VK_ESCAPE:
+                eventListener.quit();
+                break;
+            case KeyEvent.VK_P:
+                if (eventListener.isPaused()) {
+                    eventListener.run();
+                } else {
+                    eventListener.pause();
+                }
         }
     }
 }
