@@ -1,5 +1,6 @@
 package render;
 
+import game.Aeroplane;
 import game.World;
 import util.ImageHandler;
 
@@ -20,7 +21,9 @@ public class UIRenderer {
     private double scale;
 
     private Font scoreFont;
+    private Font descriptionFont;
     private Color textColor;
+    private Rectangle crashRect;
 
     private Map<String, BufferedImage> images;
 
@@ -29,6 +32,7 @@ public class UIRenderer {
         this.scale = scale;
 
         scoreFont = new Font("Quartz", Font.PLAIN, 25);
+        descriptionFont = new Font("Quartz", Font.PLAIN, 16);
         textColor = new Color(180,0,0);
     }
 
@@ -37,6 +41,13 @@ public class UIRenderer {
 
         images.put("engine_broken", ImageHandler.scaleImage(ImageHandler.loadImage("UI/engine_broken"), scale));
         images.put("crash", ImageHandler.scaleImage(ImageHandler.loadImage("UI/crash"), scale));
+
+        int w = (int)(images.get("crash").getWidth() * scale);
+        int h = (int)(images.get("crash").getHeight() * scale);
+        crashRect = new Rectangle(
+                Renderer.WIDTH / 2 - w / 2,
+                Renderer.HEIGHT / 2 - h * 3 / 4,
+                w, h);
     }
 
     public void render(Graphics2D g, World world) {
@@ -61,7 +72,9 @@ public class UIRenderer {
     }
 
     private void renderErrors(Graphics2D g, World world) {
-        if (!world.getAeroplane().isEngineRunning() && !world.getAeroplane().isCrashed()) {
+        Aeroplane aeroplane = world.getAeroplane();
+
+        if (!aeroplane.isEngineRunning() && !aeroplane.isCrashed()) {
             BufferedImage img = images.get("engine_broken");
             g.drawImage(img,
                     Renderer.WIDTH / 2 - (int)((img.getWidth() / 2) * scale),
@@ -69,7 +82,7 @@ public class UIRenderer {
                     surface);
         }
 
-        if (world.getAeroplane().isCrashed()) {
+        if (aeroplane.isCrashed()) {
             BufferedImage img = images.get("crash");
             g.drawImage(img,
                     Renderer.WIDTH / 2 - (int)((img.getWidth() / 2) * scale),
@@ -77,9 +90,40 @@ public class UIRenderer {
                     surface);
 
             g.setColor(textColor);
-            g.drawString("Your score: " + (int)(world.getAeroplane().getX() / World.ONE_METER),
-                    Renderer.WIDTH / 2 - (int)(200 * scale),
-                    Renderer.HEIGHT / 2 - (int)(0 * scale));
+            drawCenteredString(g, aeroplane.getCrash().description, crashRect, scoreFont);
+            drawCenteredString(
+                    g,
+                    "Your score: " + aeroplane.getCrash().score,
+                    crashRect.x,
+                    (int)(crashRect.y + crashRect.height),
+                    crashRect.width,
+                    scoreFont
+                    );
+
+        }
+    }
+
+    private void drawCenteredString(Graphics2D g, String text, Rectangle rect, Font font) {
+        FontMetrics metrics = g.getFontMetrics();
+        int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
+        g.setFont(font);
+
+        for (String line : text.split("\n")) {
+            int x = rect.x + (rect.width - metrics.stringWidth(line)) / 2;
+            g.drawString(line, x, y);
+             y += metrics.getHeight();
+        }
+        //g.drawRect(rect.x, rect.y, rect.width, rect.height);
+    }
+
+    private void drawCenteredString(Graphics2D g, String text, int x, int y, int width, Font font) {
+        FontMetrics metrics = g.getFontMetrics();
+        g.setFont(font);
+
+        for (String line : text.split("\n")) {
+            x = x + (width - metrics.stringWidth(line)) / 2;
+            g.drawString(line, x, y);
+            y += metrics.getHeight();
         }
     }
 }

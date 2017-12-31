@@ -15,6 +15,8 @@ public class World {
     private final int WIDTH = 1920;
     private final int HEIGHT = 1080;
     private final double DIFFICULTY = 0.05;
+    private final int INIT_CLEARANCE = 1300;
+    private final int MIN_CLEARANCE = 100;
 
     private Aeroplane aeroplane;
     private List<TerrainSegment> terrain;
@@ -24,7 +26,7 @@ public class World {
     public World() {
         terrain = new ArrayList<>();
         random = new Random();
-        aeroplane = new Aeroplane(500, HEIGHT - 120);
+        aeroplane = new Aeroplane(500, HEIGHT - 150);
         createGround();
     }
 
@@ -73,14 +75,11 @@ public class World {
                 last.getX2() + newLength,
                 last.getY2() - newHeight));
 
-        int clearance = 2000;// - (int)(aeroplane.getX() * DIFFICULTY);
-        int decrease = 5;
-
         terrain.add(0, new TerrainSegment(
                 last.getX2(),
-                last.getY2() - clearance,
+                last.getY2() - INIT_CLEARANCE + Math.min((int)(last.getX2() * DIFFICULTY), MIN_CLEARANCE),
                 last.getX2() + newLength,
-                last.getY2() - newHeight - clearance + decrease));
+                last.getY2() - newHeight - INIT_CLEARANCE + Math.min((int)(last.getX2() * DIFFICULTY), MIN_CLEARANCE)));
     }
 
     private void createGround() {

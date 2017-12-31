@@ -2,6 +2,8 @@ package game;
 
 import util.Vector;
 
+import java.util.Random;
+
 /**
  * Created by Pontus on 2017-12-06.
  */
@@ -17,6 +19,8 @@ public class Aeroplane {
     private final double GRAVITY = 9.81 * 10;
     private final double ANGULAR_DRAG = 0.05;
     private final int MIN_ENGINE_START_SPEED = 2;
+    private final int MIN_CRASH_VELOCITY = 20;
+
 
     private final CollisionPoint[] collisionPoints;
 
@@ -28,7 +32,7 @@ public class Aeroplane {
     private double throttle; // between 0 and 1
     private boolean accelerating = false;
     private boolean engineRunning = true;
-    private boolean crashed = false;
+    private Crash crash = null;
 
     public Aeroplane(int x, int y) {
         this.x = x;
@@ -38,16 +42,16 @@ public class Aeroplane {
 
         collisionPoints = new CollisionPoint[] {
                 new CollisionPoint(202, 102, CollisionPoint.POINTS.WHEEL_MAIN, 5).update(x, y, 0),
-                new CollisionPoint(0, 68, CollisionPoint.POINTS.WHEEL_TAIL, 5).update(x, y, 0),
-                new CollisionPoint(15, 0, CollisionPoint.POINTS.RUDDER, 2).update(x, y, 0),
-                new CollisionPoint(261, 6, CollisionPoint.POINTS.PROP_TOP, 2).update(x, y, 0),
-                new CollisionPoint(274, 49, CollisionPoint.POINTS.PROP_CONE, 2).update(x, y, 0),
+                new CollisionPoint(0, 68, CollisionPoint.POINTS.WHEEL_TAIL, 10).update(x, y, 0),
+                new CollisionPoint(15, 0, CollisionPoint.POINTS.RUDDER, 10).update(x, y, 0),
+                new CollisionPoint(261, 6, CollisionPoint.POINTS.PROP_TOP, 10).update(x, y, 0),
+                new CollisionPoint(274, 49, CollisionPoint.POINTS.PROP_CONE, 10).update(x, y, 0),
                 new CollisionPoint(260, 95, CollisionPoint.POINTS.PROP_BOTTOM, 1).update(x, y, 0)
         };
     }
 
     public void update(double dTime) {
-        if (!engineRunning || crashed) {
+        if (!engineRunning || isCrashed()) {
             accelerating = false;
 
             if (getSpeed() < MIN_ENGINE_START_SPEED) {
@@ -105,11 +109,15 @@ public class Aeroplane {
     }
 
     public boolean isEngineRunning() {
-        return engineRunning && !crashed;
+        return engineRunning && crash == null;
     }
 
     public boolean isCrashed() {
-        return crashed;
+        return crash != null;
+    }
+
+    public Crash getCrash() {
+        return crash;
     }
 
     public CollisionPoint[] getCollisionPoints() {
@@ -149,12 +157,16 @@ public class Aeroplane {
 
         for (CollisionPoint cp : collisionPoints) {
             if (cp.isColliding()) {
-                if (!cp.point.toString().contains("WHEEL") && cp.point != CollisionPoint.POINTS.PROP_BOTTOM) {
-                    crashed = true;
-                }
-
                 Vector slopeNormal = cp.getIntersectingSegment().getNormal().getUnitVector();
                 double normalForceLength = Vector.dot(velocity, slopeNormal);
+
+                if (!isCrashed()) {
+                    if (!cp.point.toString().contains("WHEEL") && cp.point != CollisionPoint.POINTS.PROP_BOTTOM) {
+                        crash = new Crash((int)(x / World.ONE_METER), Crash.Types.CRASH);
+                    } else if (-normalForceLength > MIN_CRASH_VELOCITY) {
+                        crash = new Crash((int)(x / World.ONE_METER), Crash.Types.HARD_LANDING);
+                    }
+                }
 
                 if (normalForceLength < 0) {
                     velocity.add(slopeNormal.mul(-normalForceLength));
@@ -180,7 +192,7 @@ public class Aeroplane {
             if (torque < 0) {
                 torque = 0;
             }
-            torque += 0.91 * 0.0005;
+            torque += 0.91 * 0.005;
         }
     }
 
