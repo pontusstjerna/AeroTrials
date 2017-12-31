@@ -1,9 +1,6 @@
 package render;
 
-import game.Aeroplane;
-import game.CollisionPoint;
-import game.TerrainSegment;
-import game.World;
+import game.*;
 import util.ImageHandler;
 
 import javax.swing.*;
@@ -49,6 +46,7 @@ public class GameRenderer {
         renderBackground(g, world.getAeroplane());
         renderTerrain(g, world);
         renderAeroplane(g, world.getAeroplane());
+        renderSmoke(g, world.getAeroplane());
 
         if (UI.DEV_MODE) {
             renderCollisionPoints(g, world.getAeroplane());
@@ -122,6 +120,17 @@ public class GameRenderer {
                     (int)((segment.getX2() - aeroplane.getX()) * scale + planeX),
                     (int)((segment.getY2() - aeroplane.getY()) * scale + planeY)
             );
+        }
+    }
+
+    private void renderSmoke(Graphics2D g, Aeroplane aeroplane) {
+        g.setColor(Color.red);
+        for (SmokeParticle particle : aeroplane.getSmoke()) {
+            int radius = (int)(particle.getRadius() * scale);
+            g.fillRoundRect(
+                    (int)((particle.getX() - aeroplane.getX()) * scale + planeX - radius / 2),
+                    (int)((particle.getY() - aeroplane.getY()) * scale + planeY - radius / 2),
+                    radius, radius, radius, radius);
         }
     }
 

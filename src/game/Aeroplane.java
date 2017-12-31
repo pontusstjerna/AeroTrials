@@ -2,6 +2,7 @@ package game;
 
 import util.Vector;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -33,6 +34,7 @@ public class Aeroplane {
     private boolean accelerating = false;
     private boolean engineRunning = true;
     private Crash crash = null;
+    private SmokeSystem smokeSystem;
 
     public Aeroplane(int x, int y) {
         this.x = x;
@@ -48,6 +50,7 @@ public class Aeroplane {
                 new CollisionPoint(274, 49, CollisionPoint.POINTS.PROP_CONE, 10).update(x, y, 0),
                 new CollisionPoint(260, 95, CollisionPoint.POINTS.PROP_BOTTOM, 1).update(x, y, 0)
         };
+        smokeSystem = new SmokeSystem(221, 66);
     }
 
     public void update(double dTime) {
@@ -78,6 +81,8 @@ public class Aeroplane {
         for (CollisionPoint cp : collisionPoints) {
             cp.update(x, y, rotation);
         }
+
+        smokeSystem.update(dTime, throttle, engineRunning, x, y, velocity, rotation);
     }
 
     public void accelerate() {
@@ -126,6 +131,10 @@ public class Aeroplane {
 
     public Vector getVelocity() {
         return velocity;
+    }
+
+    public List<SmokeParticle> getSmoke() {
+        return smokeSystem.getSmoke();
     }
 
     private void adjustSpeed(double dTime) {

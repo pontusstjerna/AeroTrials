@@ -12,15 +12,25 @@ public class SmokeParticle {
     private Vector acceleration;
     private double x,y;
     private double timeLived = 0;
+    private double radius = 10;
 
     public SmokeParticle(double x, double y, Vector velocity) {
         this.x = x;
         this.y = y;
         this.velocity = velocity;
+
+        acceleration = new Vector(0,0);
     }
 
     public void update(double dTime) {
+        x += velocity.getX() * dTime;
+        y += velocity.getY() * dTime;
 
+        acceleration.add(0,-0.1);
+
+        velocity.add(acceleration);
+        velocity.mul(0.6);
+        timeLived += dTime;
     }
 
     public double getX() {
@@ -33,5 +43,9 @@ public class SmokeParticle {
 
     public double getTimeLived() {
         return timeLived;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 }
