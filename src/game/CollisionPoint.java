@@ -5,6 +5,7 @@ import util.Vector;
 public class CollisionPoint {
     public final int offsetX, offsetY;
     public final POINTS point;
+    public final double radius;
 
     public enum POINTS {
         WHEEL_MAIN,
@@ -19,10 +20,11 @@ public class CollisionPoint {
     private TerrainSegment segment;
     private double x,y;
 
-    public CollisionPoint(int offsetX, int offsetY, POINTS point) {
+    public CollisionPoint(int offsetX, int offsetY, POINTS point, double radius) {
         this.offsetX = offsetX - Aeroplane.CG_X;
         this.offsetY = offsetY - Aeroplane.CG_Y;
         this.point = point;
+        this.radius = radius;
     }
 
     public CollisionPoint update(double planeX, double planeY, double rotation) {
@@ -38,6 +40,10 @@ public class CollisionPoint {
 
     public double getY() {
         return y;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 
     public void setCollision(Vector intersection, TerrainSegment segment) {

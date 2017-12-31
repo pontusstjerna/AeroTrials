@@ -20,6 +20,7 @@ public class UIRenderer {
     private double scale;
 
     private Font scoreFont;
+    private Color textColor;
 
     private Map<String, BufferedImage> images;
 
@@ -27,7 +28,8 @@ public class UIRenderer {
         this.surface = surface;
         this.scale = scale;
 
-        scoreFont = new Font("Quartz", Font.BOLD, 25);
+        scoreFont = new Font("Quartz", Font.PLAIN, 25);
+        textColor = new Color(180,0,0);
     }
 
     public void loadImages() {
@@ -59,7 +61,7 @@ public class UIRenderer {
     }
 
     private void renderErrors(Graphics2D g, World world) {
-        if (!world.getAeroplane().isEngineRunning()) {
+        if (!world.getAeroplane().isEngineRunning() && !world.getAeroplane().isCrashed()) {
             BufferedImage img = images.get("engine_broken");
             g.drawImage(img,
                     Renderer.WIDTH / 2 - (int)((img.getWidth() / 2) * scale),
@@ -73,6 +75,11 @@ public class UIRenderer {
                     Renderer.WIDTH / 2 - (int)((img.getWidth() / 2) * scale),
                     Renderer.HEIGHT / 2 - (int)((img.getHeight() / 2) * scale),
                     surface);
+
+            g.setColor(textColor);
+            g.drawString("Your score: " + (int)(world.getAeroplane().getX() / World.ONE_METER),
+                    Renderer.WIDTH / 2 - (int)(200 * scale),
+                    Renderer.HEIGHT / 2 - (int)(0 * scale));
         }
     }
 }

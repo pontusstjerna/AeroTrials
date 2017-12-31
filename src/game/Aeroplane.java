@@ -37,12 +37,12 @@ public class Aeroplane {
         velocity = new Vector(0, 0);
 
         collisionPoints = new CollisionPoint[] {
-                new CollisionPoint(202, 102, CollisionPoint.POINTS.WHEEL_MAIN).update(x, y, 0),
-                new CollisionPoint(0, 68, CollisionPoint.POINTS.WHEEL_TAIL).update(x, y, 0),
-                new CollisionPoint(15, 0, CollisionPoint.POINTS.RUDDER).update(x, y, 0),
-                new CollisionPoint(261, 6, CollisionPoint.POINTS.PROP_TOP).update(x, y, 0),
-                new CollisionPoint(274, 49, CollisionPoint.POINTS.PROP_CONE).update(x, y, 0),
-                new CollisionPoint(260, 95, CollisionPoint.POINTS.PROP_BOTTOM).update(x, y, 0)
+                new CollisionPoint(202, 102, CollisionPoint.POINTS.WHEEL_MAIN, 5).update(x, y, 0),
+                new CollisionPoint(0, 68, CollisionPoint.POINTS.WHEEL_TAIL, 5).update(x, y, 0),
+                new CollisionPoint(15, 0, CollisionPoint.POINTS.RUDDER, 2).update(x, y, 0),
+                new CollisionPoint(261, 6, CollisionPoint.POINTS.PROP_TOP, 2).update(x, y, 0),
+                new CollisionPoint(274, 49, CollisionPoint.POINTS.PROP_CONE, 2).update(x, y, 0),
+                new CollisionPoint(260, 95, CollisionPoint.POINTS.PROP_BOTTOM, 1).update(x, y, 0)
         };
     }
 
@@ -105,7 +105,7 @@ public class Aeroplane {
     }
 
     public boolean isEngineRunning() {
-        return engineRunning;
+        return engineRunning && !crashed;
     }
 
     public boolean isCrashed() {
@@ -172,8 +172,14 @@ public class Aeroplane {
             torque = 0;
 
         } else if (collisionPoints[0].isColliding()) {
-            torque -= 0.91 * 0.0003;
+            if (torque > 0) {
+                torque = 0;
+            }
+            torque -= 0.91 * 0.0002;
         } else if (collisionPoints[1].isColliding()) {
+            if (torque < 0) {
+                torque = 0;
+            }
             torque += 0.91 * 0.0005;
         }
     }
