@@ -60,6 +60,7 @@ public class UI {
 
     private void renderScore(Graphics2D g, World world) {
         g.setFont(scoreFont);
+        g.setColor(new Color(32,32,32));
         int score = (int)(world.getAeroplane().getX() / World.ONE_METER);
         StringBuilder zeros = new StringBuilder();
 

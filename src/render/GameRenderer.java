@@ -6,6 +6,7 @@ import util.ImageHandler;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import static render.Renderer.HEIGHT;
 import static render.Renderer.WIDTH;
@@ -20,6 +21,7 @@ public class GameRenderer {
 
     private BufferedImage[] aeroplaneImages;
     private BufferedImage background;
+    private Random random;
 
     private final double scale;
     private final double planeX = WIDTH * 0.5;
@@ -29,6 +31,7 @@ public class GameRenderer {
     public GameRenderer(JPanel surface, double scale) {
         this.scale = scale;
         this.surface = surface;
+        random = new Random();
     }
 
     public void loadImages() {
@@ -124,9 +127,13 @@ public class GameRenderer {
     }
 
     private void renderSmoke(Graphics2D g, Aeroplane aeroplane) {
-        g.setColor(Color.red);
+        g.setColor(Color.gray);
         for (SmokeParticle particle : aeroplane.getSmoke()) {
             int radius = (int)(particle.getRadius() * scale);
+            int extraGrey = random.nextInt(50);
+            g.setColor(new Color(150 + extraGrey, 150 + extraGrey, 150 + extraGrey,
+                            Math.max(0, (int)(200 - (200 * particle.getTimeLived() / SmokeParticle.LIFETIME)))));
+
             g.fillRoundRect(
                     (int)((particle.getX() - aeroplane.getX()) * scale + planeX - radius / 2),
                     (int)((particle.getY() - aeroplane.getY()) * scale + planeY - radius / 2),

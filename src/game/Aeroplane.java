@@ -82,7 +82,7 @@ public class Aeroplane {
             cp.update(x, y, rotation);
         }
 
-        smokeSystem.update(dTime, throttle, engineRunning, x, y, velocity, rotation);
+        smokeSystem.update(dTime, throttle, engineRunning, x, y, rotation);
     }
 
     public void accelerate() {
