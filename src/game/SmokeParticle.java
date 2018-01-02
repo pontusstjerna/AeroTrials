@@ -8,7 +8,7 @@ import java.util.Random;
  * Created by Pontus on 2017-12-31.
  */
 public class SmokeParticle {
-    public static final int LIFETIME = 3;
+    public static final double LIFETIME = 0.3;
 
     private Vector velocity;
     private Vector acceleration;
@@ -24,12 +24,14 @@ public class SmokeParticle {
 
         acceleration = new Vector(0,0);
         this.random = random;
-        radius = random.nextInt(5) + 15;
+        radius = random.nextInt(5) + 10;
     }
 
     public void update(double dTime) {
         x += velocity.getX() * dTime;
         y += velocity.getY() * dTime;
+
+        radius += dTime * 60;
 
         velocity.add(acceleration);
         velocity.add(
@@ -38,7 +40,7 @@ public class SmokeParticle {
         );
 
         velocity.mul(1 - dTime * 2);
-        timeLived += dTime;
+        timeLived += dTime * Math.max(LIFETIME - timeLived, 0.1) * 5;
     }
 
     public double getX() {
@@ -47,6 +49,10 @@ public class SmokeParticle {
 
     public double getY() {
         return y;
+    }
+
+    public double getDistance(SmokeParticle other) {
+        return Math.sqrt(Math.pow(other.x - x, 2) + Math.pow(other.y - y, 2));
     }
 
     public double getTimeLived() {

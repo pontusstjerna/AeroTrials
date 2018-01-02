@@ -1,5 +1,6 @@
 package game;
 
+import render.UI;
 import util.Vector;
 
 import java.util.List;
@@ -14,11 +15,11 @@ public class Aeroplane {
     public static final int CG_X = 187;
     public static final int CG_Y = 56;
 
-    private final int MAX_FORCE = 200; // newtons
+    private final int MAX_FORCE = 230; // newtons
     private final double MAX_ACC = 3;
-    private final double LIFT_FACTOR = 0.017;
+    private final double LIFT_FACTOR = 3;//0.017;
     private final double GRAVITY = 9.81 * 10;
-    private final double ANGULAR_DRAG = 0.05;
+    private final double ANGULAR_DRAG = 0.4;
     private final int MIN_ENGINE_START_SPEED = 2;
     private final int MIN_CRASH_VELOCITY = 20;
 
@@ -39,7 +40,7 @@ public class Aeroplane {
     public Aeroplane(int x, int y) {
         this.x = x;
         this.y = y;
-        acceleration = new Vector(0, 0);
+        acceleration = new Vector(0, -100);
         velocity = new Vector(0, 0);
 
         collisionPoints = new CollisionPoint[] {
@@ -169,7 +170,7 @@ public class Aeroplane {
                 Vector slopeNormal = cp.getIntersectingSegment().getNormal().getUnitVector();
                 double normalForceLength = Vector.dot(velocity, slopeNormal);
 
-                if (!isCrashed()) {
+                if (!isCrashed() && !UI.DEV_MODE) {
                     if (!cp.point.toString().contains("WHEEL") && cp.point != CollisionPoint.POINTS.PROP_BOTTOM) {
                         crash = new Crash((int)(x / World.ONE_METER), Crash.Types.CRASH);
                     } else if (-normalForceLength > MIN_CRASH_VELOCITY) {
@@ -216,7 +217,7 @@ public class Aeroplane {
         Vector forward = new Vector(Math.cos(rotation), Math.sin(rotation)).getUnitVector();
         double forwardVel = Vector.dot(velocity, forward);
         Vector lift = forward.getNormal().getUnitVector().mul(forwardVel * LIFT_FACTOR);
-        velocity.add(lift);
+        acceleration.add(lift);
     }
 
     private void applyDrag(double dTime) {

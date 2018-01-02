@@ -49,6 +49,9 @@ public class InputController implements KeyListener {
             case KeyEvent.VK_ESCAPE:
                 eventListener.quit();
                 break;
+            case KeyEvent.VK_V:
+                eventListener.start(true);
+                break;
             case KeyEvent.VK_P:
                 if (eventListener.isPaused()) {
                     eventListener.run();

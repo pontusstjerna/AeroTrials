@@ -148,6 +148,6 @@ public class GameRenderer {
                 10, 20);
         g.drawString("Throttle: " + (int)(aeroplane.getThrottle() * 100) + "%", 10, 35);
         g.drawString("Altitude: " + (int)(-aeroplane.getY() / World.ONE_METER) + " m", 10, 50);
-        g.drawString("Score: " + (int)(aeroplane.getX() / World.ONE_METER) + " m", 10, 65);
+        g.drawString("Smoke particles: " + aeroplane.getSmoke().size(), 10, 65);
     }
 }

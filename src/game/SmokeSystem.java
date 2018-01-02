@@ -11,14 +11,13 @@ import java.util.Random;
  * Created by Pontus on 2017-12-31.
  */
 public class SmokeSystem {
-    final static int SPREAD = 5;
+    final static int SPREAD = 30;
 
     private final int OFFSET_X, OFFSET_Y;
-    private final int THICKNESS = 50;
+    private final double AMOUNT = 4;
     private final int BASE_VELOCITY = 400;
 
     private List<SmokeParticle> smoke;
-    private double spawnCounter = 0;
     private Random random;
 
     public SmokeSystem(int offsetX, int offsetY) {
@@ -32,15 +31,22 @@ public class SmokeSystem {
     public void update(double dTime, double throttle, boolean engineRunning, double x, double y, double rotation) {
         if (engineRunning) {
             Vector smokeVel = new Vector(-BASE_VELOCITY * Math.cos(rotation), -BASE_VELOCITY * Math.sin(rotation));
+            double offsetX = OFFSET_X * Math.cos(rotation) - OFFSET_Y * Math.sin(rotation);
+            double offsetY = OFFSET_X * Math.sin(rotation) + OFFSET_Y * Math.cos(rotation);
 
-            spawnCounter += dTime;
-            if (spawnCounter * 1000 > 100 - THICKNESS) {
-                smoke.add(
-                        new SmokeParticle(
-                                x + OFFSET_X * Math.cos(rotation) - OFFSET_Y * Math.sin(rotation),
-                                y + OFFSET_X * Math.sin(rotation) + OFFSET_Y * Math.cos(rotation),
-                                   smokeVel, random));
-                spawnCounter = 0;
+            double smokeX = x + offsetX;
+            double smokeY = y + offsetY;
+
+            if (smoke.isEmpty()) {
+                smoke.add(new SmokeParticle(smokeX, smokeY, smokeVel, random));
+                return;
+            }
+
+            SmokeParticle last = smoke.get(smoke.size() - 1);
+            while (Math.sqrt(Math.pow(last.getX() - smokeX,2) + Math.pow(last.getY() - smokeY, 2)) >
+                    Math.max(AMOUNT - throttle * AMOUNT, 0.0001)) {
+                last = new SmokeParticle(smokeX, smokeY, smokeVel, random);
+                smoke.add(last);
             }
         }
 

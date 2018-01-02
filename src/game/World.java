@@ -17,6 +17,7 @@ public class World {
     private final double DIFFICULTY = 0.02;
     private final int INIT_CLEARANCE = 1000;
     private final int MIN_CLEARANCE = 230;
+    private final int INIT_HEIGHT = HEIGHT - 102;
 
     private Aeroplane aeroplane;
     private List<TerrainSegment> terrain;
@@ -26,12 +27,12 @@ public class World {
     public World() {
         terrain = new ArrayList<>();
         random = new Random();
-        aeroplane = new Aeroplane(500, HEIGHT - 150);
+        aeroplane = new Aeroplane(500, INIT_HEIGHT);
         createGround();
     }
 
     public void update(double dTime) {
-        if (aeroplane.getX() > terrain.get(terrain.size() - 2).getX1()) {
+        if (aeroplane.getX() > terrain.get(terrain.size() - 10).getX1()) {
             generateTerrain();
         }
 
@@ -62,7 +63,7 @@ public class World {
     }
 
     public void reset() {
-        aeroplane = new Aeroplane(501, HEIGHT - 120);
+        aeroplane = new Aeroplane(501, INIT_HEIGHT);
     }
 
     private void generateTerrain() {
@@ -84,7 +85,7 @@ public class World {
 
     private void createGround() {
         terrain.add(new TerrainSegment(0, HEIGHT - 50, WIDTH, HEIGHT - 50));
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 15; i++) {
             generateTerrain();
         }
     }

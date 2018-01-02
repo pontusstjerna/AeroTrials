@@ -16,8 +16,8 @@ import java.awt.image.BufferedImage;
  * Created by Pontus on 2017-12-06.
  */
 public class Renderer {
-    public static final int WIDTH = 960;
-    public static final int HEIGHT = 540;
+    public static final int WIDTH = 1980;//960;
+    public static final int HEIGHT = 1080;//540;
 
     private JPanel surface;
     private JFrame frame;
@@ -31,7 +31,7 @@ public class Renderer {
         this.world = world;
     }
 
-    public void start(KeyListener keyListener, EventListener eventListener) {
+    public void start(KeyListener keyListener, EventListener eventListener, boolean fullScreen) {
         frame = new JFrame("AeroTrials");
         frame.setSize((int)(WIDTH), (int)(HEIGHT));
         frame.setLocationRelativeTo(null);
@@ -46,6 +46,12 @@ public class Renderer {
         surface.setFocusable(true);
         surface.setBackground(Color.black);
         surface.addKeyListener(keyListener);
+
+        if (fullScreen) {
+            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+            frame.setUndecorated(true);
+            frame.setVisible(true);
+        }
 
         ui = new UI(surface, scale, eventListener);
         game = new GameRenderer(surface, scale);
