@@ -1,23 +1,19 @@
 package render;
 
-import game.Aeroplane;
-import game.CollisionPoint;
-import game.TerrainSegment;
 import game.World;
+import util.CfgParser;
 import util.EventListener;
-import util.ImageHandler;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 
 /**
  * Created by Pontus on 2017-12-06.
  */
 public class Renderer {
-    public static final int WIDTH = 1980;//960;
-    public static final int HEIGHT = 1080;//540;
+    public static final int WIDTH = CfgParser.readInt("WIDTH");//960;
+    public static final int HEIGHT = CfgParser.readInt("HEIGHT");//540;
 
     private JPanel surface;
     private JFrame frame;
