@@ -49,6 +49,12 @@ public class Main implements EventListener {
     }
 
     @Override
+    public void toMenu() {
+        renderer.toMenu();
+        System.out.println("Returning to menu.");
+    }
+
+    @Override
     public void quit() {
         pause();
         renderer.quit();

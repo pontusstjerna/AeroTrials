@@ -131,7 +131,7 @@ public class GameRenderer {
         for (SmokeParticle particle : aeroplane.getSmoke()) {
             int radius = (int)(particle.getRadius() * scale);
             int extraGrey = random.nextInt(50);
-            g.setColor(new Color(150 + extraGrey, 150 + extraGrey, 150 + extraGrey,
+            g.setColor(new Color(160 + extraGrey, 160 + extraGrey, 160 + extraGrey,
                             Math.max(0, (int)(200 - (200 * particle.getTimeLived() / SmokeParticle.LIFETIME)))));
 
             g.fillRoundRect(

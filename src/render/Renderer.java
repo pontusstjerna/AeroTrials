@@ -69,6 +69,13 @@ public class Renderer {
         gameSurface.requestFocus();
     }
 
+    public void toMenu() {
+        isMenu = true;
+        frame.getContentPane().removeAll();
+        menu.start();
+        frame.setVisible(true);
+    }
+
     public void update(double dTime) {
         gameSurface.repaint();
     }

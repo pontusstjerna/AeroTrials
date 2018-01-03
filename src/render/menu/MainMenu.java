@@ -33,9 +33,9 @@ public class MainMenu implements Menu {
     private double scale;
 
     private int selection = 0;
-    private Color selectionColor = new Color(200,0,0);
+    private Color selectionColor = new Color(150,0,0);
     private Color textColor = new Color(16,16,16);
-    private Color selectionBackgroundColor = new Color(0,0,0,60);
+    private Color selectionBackgroundColor = new Color(0,0,0, 80);
     private Font selectionFont;
 
     public MainMenu(JFrame frame, EventListener eventListener) {
@@ -58,6 +58,7 @@ public class MainMenu implements Menu {
         surface.addMouseListener(menuListener);
 
         frame.getContentPane().add(surface);
+        surface.requestFocus();
     }
 
     public void loadImages() {

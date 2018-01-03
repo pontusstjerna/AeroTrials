@@ -15,7 +15,10 @@
    id="svg3336"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="mainMenu.svg">
+   sodipodi:docname="mainMenu.svg"
+   inkscape:export-filename="F:\Pontus\Documents\dev\java\aerotrials\src\assets\UI\mainMenu.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs3338">
     <filter
@@ -39,8 +42,8 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="501.97434"
+     inkscape:zoom="0.5"
+     inkscape:cx="497.93373"
      inkscape:cy="493.14451"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -101,34 +104,12 @@
          x="967.72614"
          y="488.69705"></tspan></text>
     <rect
-       style="fill:#afcaed;fill-opacity:1"
+       style="fill:#87cdff;fill-opacity:1"
        id="rect3360"
        width="1980"
        height="1080"
        x="0"
        y="-27.637838" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="707.65625"
-       y="344.04184"
-       id="text5207"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan5209"
-         x="707.65625"
-         y="344.04184">With an incredibly ugly menu</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70px;line-height:125%;font-family:Quartz;-inkscape-font-specification:Quartz;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="826.8457"
-       y="575.45056"
-       id="text5211"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan5213"
-         x="826.8457"
-         y="575.45056">Start game</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:70px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -140,40 +121,37 @@
          id="tspan5217"
          x="800"
          y="652.36218" /></text>
-    <text
-       sodipodi:linespacing="125%"
-       id="text5219"
-       y="675.68982"
-       x="844.14063"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70px;line-height:125%;font-family:Quartz;-inkscape-font-specification:Quartz;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       xml:space="preserve"><tspan
-         y="675.68982"
-         x="844.14063"
-         id="tspan5221"
-         sodipodi:role="line">highscore</tspan></text>
-    <text
-       sodipodi:linespacing="125%"
-       id="text5227"
-       y="775.68982"
-       x="878.95264"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70px;line-height:125%;font-family:Quartz;-inkscape-font-specification:Quartz;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       xml:space="preserve"><tspan
-         y="775.68982"
-         x="878.95264"
-         id="tspan5229"
-         sodipodi:role="line">options</tspan></text>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Layer 2"
+     style="display:inline">
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70px;line-height:125%;font-family:Quartz;-inkscape-font-specification:Quartz;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="928.10303"
-       y="875.68982"
-       id="text5231"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:150px;line-height:125%;font-family:'Segoe Print';-inkscape-font-specification:'Segoe Print Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5203)"
+       x="586.95068"
+       y="271.83887"
+       id="text4163"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         id="tspan5233"
-         x="928.10303"
-         y="875.68982">exit</tspan></text>
+         id="tspan4165"
+         x="586.95068"
+         y="271.83887">Aero Trials</tspan></text>
     <text
+       transform="translate(0,27.637839)"
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="707.65625"
+       y="344.04184"
+       id="text5207"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5209"
+         x="707.65625"
+         y="344.04184">With an incredibly ugly menu</tspan></text>
+    <text
+       transform="translate(0,27.637839)"
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:23.79600716px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="100"
@@ -187,18 +165,56 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Layer 2">
+     id="layer3"
+     inkscape:label="Layer 3"
+     style="display:inline">
     <text
+       transform="translate(0,27.637839)"
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:150px;line-height:125%;font-family:'Segoe Print';-inkscape-font-specification:'Segoe Print Bold';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5203)"
-       x="586.95068"
-       y="271.83887"
-       id="text4163"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70px;line-height:125%;font-family:Quartz;-inkscape-font-specification:Quartz;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="826.8457"
+       y="575.45056"
+       id="text5211"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         id="tspan4165"
-         x="586.95068"
-         y="271.83887">Aero Trials</tspan></text>
+         id="tspan5213"
+         x="826.8457"
+         y="575.45056">Start game</tspan></text>
+    <text
+       transform="translate(0,27.637839)"
+       sodipodi:linespacing="125%"
+       id="text5219"
+       y="675.68982"
+       x="844.14063"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70px;line-height:125%;font-family:Quartz;-inkscape-font-specification:Quartz;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         y="675.68982"
+         x="844.14063"
+         id="tspan5221"
+         sodipodi:role="line">highscore</tspan></text>
+    <text
+       transform="translate(0,27.637839)"
+       sodipodi:linespacing="125%"
+       id="text5227"
+       y="775.68982"
+       x="878.95264"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70px;line-height:125%;font-family:Quartz;-inkscape-font-specification:Quartz;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         y="775.68982"
+         x="878.95264"
+         id="tspan5229"
+         sodipodi:role="line">options</tspan></text>
+    <text
+       transform="translate(0,27.637839)"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:70px;line-height:125%;font-family:Quartz;-inkscape-font-specification:Quartz;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="928.10303"
+       y="875.68982"
+       id="text5231"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan5233"
+         x="928.10303"
+         y="875.68982">exit</tspan></text>
   </g>
 </svg>

@@ -8,7 +8,7 @@ import java.util.Random;
  * Created by Pontus on 2017-12-31.
  */
 public class SmokeParticle {
-    public static final double LIFETIME = 0.3;
+    public static final double LIFETIME = 0.4;
 
     private Vector velocity;
     private Vector acceleration;

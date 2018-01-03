@@ -7,6 +7,7 @@ public interface EventListener {
     void start();
     void run();
     void pause();
+    void toMenu();
     void quit();
     boolean isPaused();
 }

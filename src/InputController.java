@@ -43,11 +43,19 @@ public class InputController implements KeyListener {
                 eventListener.run();
                 world.reset();
                 break;
+            case KeyEvent.VK_ENTER:
+                eventListener.run();
+                world.reset();
+                break;
             case KeyEvent.VK_0:
                 UI.DEV_MODE = !UI.DEV_MODE;
                 break;
             case KeyEvent.VK_ESCAPE:
-                eventListener.quit();
+                if (eventListener.isPaused()) {
+                    eventListener.toMenu();
+                } else {
+                    eventListener.pause();
+                }
                 break;
             case KeyEvent.VK_V:
                 eventListener.start();
