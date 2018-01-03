@@ -1,6 +1,7 @@
 package render;
 
 import game.World;
+import render.menu.MainMenu;
 import util.CfgParser;
 import util.EventListener;
 
@@ -15,11 +16,13 @@ public class Renderer {
     public static final int WIDTH = CfgParser.readInt("WIDTH");//960;
     public static final int HEIGHT = CfgParser.readInt("HEIGHT");//540;
 
-    private JPanel surface;
+    private JPanel gameSurface;
     private JFrame frame;
     private World world;
+    private MainMenu menu;
     private UI ui;
     private GameRenderer game;
+    private boolean isMenu = true;
 
     private final double scale = 0.5;
 
@@ -27,39 +30,47 @@ public class Renderer {
         this.world = world;
     }
 
-    public void start(KeyListener keyListener, EventListener eventListener, boolean fullScreen) {
+    public void start(KeyListener keyListener, EventListener eventListener) {
         frame = new JFrame("AeroTrials");
         frame.setSize((int)(WIDTH), (int)(HEIGHT));
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        surface = new JPanel() {
+        gameSurface = new JPanel() {
             @Override
             public void paintComponent(Graphics graphics) {
                 render((Graphics2D) graphics);
             }
         };
-        surface.setFocusable(true);
-        surface.setBackground(Color.black);
-        surface.addKeyListener(keyListener);
+        gameSurface.setFocusable(true);
+        gameSurface.setBackground(Color.black);
 
-        if (fullScreen) {
+        gameSurface.addKeyListener(keyListener);
+
+        if (CfgParser.readBoolean("FULLSCREEN")) {
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setUndecorated(true);
-            frame.setVisible(true);
         }
 
-        ui = new UI(surface, scale, eventListener);
-        game = new GameRenderer(surface, scale);
+        menu = new MainMenu(frame, eventListener);
+        ui = new UI(gameSurface, scale, eventListener);
+        game = new GameRenderer(gameSurface, scale);
 
         loadImages();
+        menu.start();
 
-        frame.add(surface);
         frame.setVisible(true);
     }
 
+    public void run() {
+        isMenu = false;
+        frame.getContentPane().add(gameSurface);
+        frame.setVisible(true);
+        gameSurface.requestFocus();
+    }
+
     public void update(double dTime) {
-        surface.repaint();
+        gameSurface.repaint();
     }
 
     public void quit() {
@@ -86,6 +97,7 @@ public class Renderer {
 
     private void loadImages() {
         System.out.println("Loading images....");
+        menu.loadImages();
         game.loadImages();
         ui.loadImages();
         System.out.println("Images loaded!");

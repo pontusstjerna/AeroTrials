@@ -25,19 +25,19 @@ public final class CfgParser {
         return Integer.valueOf(parser.readValue(varName));
     }
 
-    public long readLong(String varName) {
+    public static long readLong(String varName) {
         return Long.valueOf(parser.readValue(varName));
     }
 
-    public double readDouble(String varName){
+    public static double readDouble(String varName){
         return Double.valueOf(parser.readValue(varName));
     }
 
-    public String readString(String varName){
+    public static String readString(String varName){
         return parser.readValue(varName);
     }
 
-    public boolean readBoolean(String varName){
+    public static boolean readBoolean(String varName){
         return Boolean.valueOf(parser.readValue(varName));
     }
 

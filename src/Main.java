@@ -17,7 +17,7 @@ public class Main implements EventListener {
     private long lastTime = 0;
     private boolean isPaused = true;
 
-    public static void main(String[] args ) { new Main().start(false); }
+    public static void main(String[] args ) { new Main().start(); }
 
     public Main() {
         System.setProperty("sun.java2d.opengl", "true");
@@ -26,11 +26,10 @@ public class Main implements EventListener {
     }
 
     @Override
-    public void start(boolean fullScreen) {
+    public void start() {
         System.out.println("Starting game.");
-        renderer.start(new InputController(world, this), this, fullScreen);
+        renderer.start(new InputController(world, this), this);
         timer = new Timer(5, (event) -> update());
-        run();
     }
 
     @Override
@@ -38,6 +37,7 @@ public class Main implements EventListener {
         System.out.println("Running game.");
         lastTime = System.currentTimeMillis();
         timer.start();
+        renderer.run();
         isPaused = false;
     }
 
