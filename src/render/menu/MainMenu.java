@@ -31,6 +31,7 @@ public class MainMenu implements Menu {
     private EventListener eventListener;
     private MenuListener menuListener;
     private Map<String, BufferedImage> images;
+    private String currentView;
     private Highscores highscores;
     private double scale;
 
@@ -62,6 +63,8 @@ public class MainMenu implements Menu {
 
         frame.getContentPane().add(surface);
         surface.requestFocus();
+
+        currentView = "main_menu";
     }
 
     public void loadImages() {
@@ -71,12 +74,20 @@ public class MainMenu implements Menu {
         scale = (double) WIDTH / background.getWidth();
 
         images.put("main_menu", ImageHandler.scaleImage(background, scale));
+        images.put("highscore", ImageHandler.scaleImage(ImageHandler.loadImage("UI/highscore"), scale));
         selectionFont = new Font("Quartz", Font.PLAIN, (int)(56 * scale));
     }
 
     public void render(Graphics2D g) {
-        g.drawImage(images.get("main_menu"), 0, 0, surface);
-        renderSelections(g);
+        g.drawImage(images.get(currentView), 0, 0, surface);
+        switch(currentView) {
+            case "main_menu":
+                renderSelections(g);
+                break;
+            case "highscore":
+                renderHighscores(g);
+                break;
+        }
     }
 
     private void renderSelections(Graphics2D g) {
@@ -100,6 +111,15 @@ public class MainMenu implements Menu {
         }
     }
 
+    private void renderHighscores(Graphics2D g) {
+        for (int i = 0; i < 3; i++) {
+            g.drawString(
+                    "" + highscores.getHighscores().get(i).score,
+                    WIDTH / 2,
+                    (int)(scale * 200) + i * 50);
+        }
+    }
+
     @Override
     public void enter() {
         switch (selection) {
@@ -108,6 +128,7 @@ public class MainMenu implements Menu {
                 eventListener.run();
                 break;
             case 1:
+                currentView = "highscore";
                 break;
             case 2:
                 break;
