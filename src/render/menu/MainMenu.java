@@ -2,6 +2,7 @@ package render.menu;
 
 import util.CfgParser;
 import util.EventListener;
+import util.Highscores;
 import util.ImageHandler;
 
 import javax.swing.*;
@@ -30,6 +31,7 @@ public class MainMenu implements Menu {
     private EventListener eventListener;
     private MenuListener menuListener;
     private Map<String, BufferedImage> images;
+    private Highscores highscores;
     private double scale;
 
     private int selection = 0;
@@ -38,9 +40,10 @@ public class MainMenu implements Menu {
     private Color selectionBackgroundColor = new Color(0,0,0, 80);
     private Font selectionFont;
 
-    public MainMenu(JFrame frame, EventListener eventListener) {
+    public MainMenu(JFrame frame, EventListener eventListener, Highscores highscores) {
         this.frame = frame;
         this.eventListener = eventListener;
+        this.highscores = highscores;
         menuListener = new MenuListener(this);
     }
 

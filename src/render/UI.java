@@ -1,8 +1,10 @@
 package render;
 
 import game.Aeroplane;
+import game.Highscore;
 import game.World;
 import util.EventListener;
+import util.Highscores;
 import util.ImageHandler;
 
 import javax.swing.*;
@@ -19,6 +21,7 @@ public class UI {
 
     private JPanel surface;
     private EventListener eventListener;
+    private Highscores highscores;
 
     private double scale;
 
@@ -29,10 +32,11 @@ public class UI {
 
     private Map<String, BufferedImage> images;
 
-    public UI(JPanel surface, double scale, EventListener eventListener) {
+    public UI(JPanel surface, double scale, EventListener eventListener, Highscores highscores) {
         this.surface = surface;
         this.scale = scale;
         this.eventListener = eventListener;
+        this.highscores = highscores;
 
         scoreFont = new Font("Quartz", Font.PLAIN, 25);
         descriptionFont = new Font("Quartz", Font.PLAIN, 16);
@@ -93,8 +97,15 @@ public class UI {
                     Renderer.HEIGHT / 2 - (int)((img.getHeight() / 2) * scale),
                     surface);
 
+
+            if (highscores.isHighscore(aeroplane.getCrash().score)) {
+                g.setColor(new Color(0,140,0));
+                drawCenteredString(g, "New high score!", crashRect, scoreFont);
+            } else {
+                g.setColor(textColor);
+                drawCenteredString(g, aeroplane.getCrash().description, crashRect, scoreFont);
+            }
             g.setColor(textColor);
-            drawCenteredString(g, aeroplane.getCrash().description, crashRect, scoreFont);
             drawCenteredString(
                     g,
                     "Your score: " + aeroplane.getCrash().score,
@@ -103,6 +114,7 @@ public class UI {
                     crashRect.width,
                     scoreFont
                     );
+
             eventListener.pause();
         }
     }

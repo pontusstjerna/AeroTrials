@@ -16,7 +16,7 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="mainMenu.svg"
-   inkscape:export-filename="F:\Pontus\Documents\dev\java\aerotrials\src\assets\UI\mainMenu.png"
+   inkscape:export-filename="F:\Pontus\Documents\dev\java\aerotrials\src\assets\UI\main_menu.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -46,7 +46,7 @@
      inkscape:cx="497.93373"
      inkscape:cy="493.14451"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer3"
      showgrid="true"
      units="px"
      inkscape:snap-grids="true"
@@ -167,7 +167,7 @@
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Layer 3"
-     style="display:inline">
+     style="display:none">
     <text
        transform="translate(0,27.637839)"
        xml:space="preserve"

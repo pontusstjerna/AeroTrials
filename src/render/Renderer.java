@@ -4,6 +4,7 @@ import game.World;
 import render.menu.MainMenu;
 import util.CfgParser;
 import util.EventListener;
+import util.Highscores;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,17 +23,20 @@ public class Renderer {
     private MainMenu menu;
     private UI ui;
     private GameRenderer game;
+    private Highscores highscores;
     private boolean isMenu = true;
 
     private final double scale = 0.5;
 
     public Renderer(World world) {
         this.world = world;
+        highscores = new Highscores();
     }
 
     public void start(KeyListener keyListener, EventListener eventListener) {
         frame = new JFrame("AeroTrials");
-        frame.setSize((int)(WIDTH), (int)(HEIGHT));
+        frame.getContentPane().setSize(WIDTH, HEIGHT);
+        frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -49,11 +53,11 @@ public class Renderer {
 
         if (CfgParser.readBoolean("FULLSCREEN")) {
             frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            frame.setUndecorated(true);
+            //frame.setUndecorated(true);
         }
 
-        menu = new MainMenu(frame, eventListener);
-        ui = new UI(gameSurface, scale, eventListener);
+        menu = new MainMenu(frame, eventListener, highscores);
+        ui = new UI(gameSurface, scale, eventListener, highscores);
         game = new GameRenderer(gameSurface, scale);
 
         loadImages();
