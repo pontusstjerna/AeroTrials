@@ -15,11 +15,12 @@ public class Aeroplane {
     public static final int CG_X = 187;
     public static final int CG_Y = 56;
 
-    private final int MAX_FORCE = 230; // newtons
+    private final int MAX_FORCE = 150; // newtons
     private final double MAX_ACC = 3;
-    private final double LIFT_FACTOR = 3;//0.017;
+    private final double MAX_DEACC = 1;
+    private final double LIFT_FACTOR = 2.5;//0.017;
     private final double GRAVITY = 9.81 * 10;
-    private final double ANGULAR_DRAG = 0.4;
+    private final double ANGULAR_DRAG = 1.2;
     private final int MIN_ENGINE_START_SPEED = 2;
     private final int MIN_CRASH_VELOCITY = 20;
 
@@ -31,8 +32,8 @@ public class Aeroplane {
     private Vector velocity; // m/s
     private double rotation = 0;
     private double torque = 0; // rads / sec
-    private double throttle; // between 0 and 1
-    private boolean accelerating = false;
+    private double throttle = 1; // between 0 and 1
+    private boolean accelerating = true;
     private boolean engineRunning = true;
     private Crash crash = null;
     private SmokeSystem smokeSystem;
@@ -91,7 +92,7 @@ public class Aeroplane {
     }
 
     public void release() {
-        accelerating = false;
+        accelerating = true;
     }
 
     public double getX() {
@@ -139,7 +140,7 @@ public class Aeroplane {
     }
 
     private void adjustSpeed(double dTime) {
-        if (accelerating) {
+        if (true) {
             if (throttle < 1) {
                 throttle += MAX_ACC * dTime;
             } else {
@@ -147,7 +148,7 @@ public class Aeroplane {
             }
         } else {
             if (throttle > 0) {
-                throttle -= MAX_ACC * dTime;
+                throttle -= MAX_DEACC * dTime;
             } else {
                 throttle = 0;
             }
@@ -222,7 +223,7 @@ public class Aeroplane {
 
     private void applyDrag(double dTime) {
         // From: https://en.wikipedia.org/wiki/Drag_(physics)
-        final double p = 1.2;
+        final double p = 0.5;
         final double v = velocity.getLength();
         final double C_D = 0.04;
         final double A = 3.14; // Propeller area
