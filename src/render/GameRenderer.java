@@ -116,13 +116,22 @@ public class GameRenderer {
     private void renderTerrain(Graphics2D g, World world) {
         g.setColor(new Color(16,16,16));
         Aeroplane aeroplane = world.getAeroplane();
-        for (TerrainSegment segment : world.getTerrain()) {
-            g.drawLine(
+        for (HoleSegment segment : world.getTunnel()) {
+            int[] xPoints = {
                     (int)((segment.getX1() - aeroplane.getX()) * scale + planeX),
-                    (int)((segment.getY1() - aeroplane.getY()) * scale + planeY),
                     (int)((segment.getX2() - aeroplane.getX()) * scale + planeX),
-                    (int)((segment.getY2() - aeroplane.getY()) * scale + planeY)
-            );
+                    (int)((segment.getX3() - aeroplane.getX()) * scale + planeX),
+                    (int)((segment.getX4() - aeroplane.getX()) * scale + planeX)
+            };
+
+            int[] yPoints = {
+                    (int)((segment.getY1() - aeroplane.getY()) * scale + planeY),
+                    (int)((segment.getY2() - aeroplane.getY()) * scale + planeY),
+                    (int)((segment.getY3() - aeroplane.getY()) * scale + planeY),
+                    (int)((segment.getY4() - aeroplane.getY()) * scale + planeY)
+            };
+
+            g.fillPolygon(xPoints, yPoints, 4);
         }
     }
 
