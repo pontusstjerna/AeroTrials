@@ -20,7 +20,6 @@ public class World {
     private final int INIT_HEIGHT = HEIGHT - 102;
 
     private Aeroplane aeroplane;
-    //private List<TerrainSegment> terrain;
     private List<HoleSegment> tunnel;
 
     private Random random;
@@ -34,21 +33,13 @@ public class World {
     }
 
     public void update(double dTime) {
-        /*if (aeroplane.getX() > terrain.get(terrain.size() - 10).getX1()) {
-            generateTerrain();
-        }*/
-
-        if (aeroplane.getX() > tunnel.get(tunnel.size() - 10).getX1()) {
+        if (aeroplane.getX() > tunnel.get(tunnel.size() - 10).getFirst().getX()) {
             generateTunnel();
         }
 
         aeroplane.update(dTime);
         terrainCollision();
     }
-
-    /*public List<TerrainSegment> getTerrain() {
-        return terrain;
-    }*/
 
     public List<HoleSegment> getTunnel() {
         return tunnel;
@@ -59,37 +50,14 @@ public class World {
     }
 
     public void terrainCollision() {
-        /*for (CollisionPoint cp : aeroplane.getCollisionPoints()) {
-            for (TerrainSegment segment : terrain) {
-                Vector maybeIntersection = segment.intersects(cp.getX(), cp.getY(), Math.max(cp.getRadius(), aeroplane.getSpeed() * 0.1));
-                if (maybeIntersection != null) {
-                    cp.setCollision(maybeIntersection, segment);
-                    break;
-                } else {
-                    cp.setCollision(null, null);
-                }
-            }
-        }*/
-
         for (CollisionPoint cp : aeroplane.getCollisionPoints()) {
             Vector maybeIntersection = null;
             for (HoleSegment hole : tunnel) {
                 maybeIntersection = hole.collides(cp.getX(), cp.getY());
-
-                // No collision, we're inside at least one hole
-                if (maybeIntersection == null) {
-                    cp.setCollision(null);
+                if (maybeIntersection != null) {
                     break;
                 }
-                /*Vector maybeIntersection = hole.intersects(cp.getX(), cp.getY(), Math.max(cp.getRadius(), aeroplane.getSpeed() * 0.1));
-                if (maybeIntersection != null) {
-                    cp.setCollision(maybeIntersection, segment);
-                    break;
-                } else {
-                    cp.setCollision(null, null);
-                }*/
             }
-
             cp.setCollision(maybeIntersection);
         }
     }
@@ -98,40 +66,17 @@ public class World {
         aeroplane = new Aeroplane(501, INIT_HEIGHT);
     }
 
-    /*private void generateTerrain() {
-        int newLength = 500;
-        TerrainSegment last = terrain.get(terrain.size() - 1);
-        int newHeight = 200 - random.nextInt(400);
-        terrain.add(new TerrainSegment(
-                last.getX2(),
-                last.getY2(),
-                last.getX2() + newLength,
-                last.getY2() - newHeight));
-
-        terrain.add(0, new TerrainSegment(
-                last.getX2(),
-                last.getY2() - Math.max((int)(INIT_CLEARANCE - last.getX1() * DIFFICULTY), MIN_CLEARANCE),
-                last.getX2() + newLength,
-                last.getY2() - newHeight - Math.max((int)(INIT_CLEARANCE - last.getX2() * DIFFICULTY), MIN_CLEARANCE)));
-    }*/
-
     private void generateTunnel() {
         int newLength = 2500;
         HoleSegment last = tunnel.get(tunnel.size() - 1);
-        int newHeight = 400 - random.nextInt(800);
+        int newHeight = 600 - random.nextInt(900);
         tunnel.add(new HoleSegment(
                 last.getSnd().getFloorX() - 150,
                 last.getSnd().getFloorY(),
                 last.getSnd().getFloorX() + newLength,
                 last.getSnd().getFloorY() - newHeight,
-                Math.max((int)(INIT_CLEARANCE - last.getX2() * DIFFICULTY), MIN_CLEARANCE)
+                Math.max((int)(INIT_CLEARANCE - last.getSnd().getX() * DIFFICULTY), MIN_CLEARANCE)
                 ));
-
-        /*terrain.add(0, new TerrainSegment(
-                last.getX2(),
-                last.getY2() - Math.max((int)(INIT_CLEARANCE - last.getX1() * DIFFICULTY), MIN_CLEARANCE),
-                last.getX2() + newLength,
-                last.getY2() - newHeight - Math.max((int)(INIT_CLEARANCE - last.getX2() * DIFFICULTY), MIN_CLEARANCE)));*/
     }
 
     private void createGround() {

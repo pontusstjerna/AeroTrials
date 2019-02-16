@@ -17,7 +17,6 @@ public class CollisionPoint {
     }
 
     private Vector intersection;
-    private TerrainSegment segment;
     private double x,y;
 
     public CollisionPoint(int offsetX, int offsetY, POINTS point, double radius) {
@@ -42,25 +41,12 @@ public class CollisionPoint {
         return y;
     }
 
-    public double getRadius() {
-        return radius;
-    }
-
-    public void setCollision(Vector intersection, TerrainSegment segment) {
-        this.intersection = intersection;
-        this.segment = segment;
-    }
-
     public void setCollision(Vector collision) {
         this.intersection = collision;
     }
 
     public Vector getIntersection() {
         return intersection;
-    }
-
-    public TerrainSegment getIntersectingSegment() {
-        return segment;
     }
 
     public boolean isColliding() {

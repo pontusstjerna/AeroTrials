@@ -117,21 +117,21 @@ public class GameRenderer {
         g.setColor(new Color(16,16,16));
         Aeroplane aeroplane = world.getAeroplane();
         for (HoleSegment segment : world.getTunnel()) {
-            int[] xPoints = {
-                    (int)((segment.getX1() - aeroplane.getX()) * scale + planeX),
-                    (int)((segment.getX2() - aeroplane.getX()) * scale + planeX),
-                    (int)((segment.getX3() - aeroplane.getX()) * scale + planeX),
-                    (int)((segment.getX4() - aeroplane.getX()) * scale + planeX)
-            };
+            double[] segXPoints = segment.getXPoints();
+            double[] segYPoints = segment.getYPoints();
 
-            int[] yPoints = {
-                    (int)((segment.getY1() - aeroplane.getY()) * scale + planeY),
-                    (int)((segment.getY2() - aeroplane.getY()) * scale + planeY),
-                    (int)((segment.getY3() - aeroplane.getY()) * scale + planeY),
-                    (int)((segment.getY4() - aeroplane.getY()) * scale + planeY)
-            };
+            int[] xPoints = new int[segXPoints.length];
+            int[] yPoints = new int[segYPoints.length];
 
-            g.fillPolygon(xPoints, yPoints, 4);
+            for (int i = 0; i < xPoints.length; i++) {
+                xPoints[i] = (int)((segXPoints[i] - aeroplane.getX()) * scale + planeX);
+            }
+
+            for (int i = 0; i < yPoints.length; i++) {
+                yPoints[i] = (int)((segYPoints[i] - aeroplane.getY()) * scale + planeY);
+            }
+
+            g.fillPolygon(xPoints, yPoints, xPoints.length);
         }
     }
 

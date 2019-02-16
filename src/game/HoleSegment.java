@@ -11,14 +11,9 @@ public class HoleSegment {
 
     private int thickness;
 
-    private double x1;
-    private double y1;
-    private double x2;
-    private double y2;
-    private double x3;
-    private double y3;
-    private double x4;
-    private double y4;
+    // Top left, top right, bottom right, bottom left (like CSS)
+    private double[] xPoints = new double[4];
+    private double[] yPoints = new double[4];
 
     private double rotation;
 
@@ -36,19 +31,14 @@ public class HoleSegment {
 
         this.rotation = Math.atan2(slope.getY(), slope.getX());
 
-        this.x1 = x1 - normal.getX() * thickness;
-        this.y1 = y1 + normal.getY() * thickness;
-        this.x2 = this.x1 + vector.getX();
-        this.y2 = this.y1 + vector.getY();
-
-        this.x3 = this.x2 + normal.getX() * thickness * 2;
-        this.y3 = this.y2 - normal.getY() * thickness * 2;
-        this.x4 = this.x3 - vector.getX();
-        this.y4 = this.y3 - vector.getY();
-    }
-
-    public double getRotation() {
-        return rotation;
+        xPoints[0] = x1 - normal.getX() * thickness;
+        yPoints[0] = y1 + normal.getY() * thickness;
+        xPoints[1] = xPoints[0] + vector.getX();
+        yPoints[1] = yPoints[0] + vector.getY();
+        xPoints[2] = xPoints[1] + normal.getX() * thickness * 2;
+        yPoints[2] = yPoints[1] - normal.getY() * thickness * 2;
+        xPoints[3] = xPoints[2] - vector.getX();
+        yPoints[3] = yPoints[2] - vector.getY();
     }
 
     public Vector getFirst() {
@@ -59,40 +49,12 @@ public class HoleSegment {
         return snd;
     }
 
-    public int getX1() {
-        return (int)x1;
+    public double[] getXPoints() {
+        return xPoints;
     }
 
-    public int getY1() {
-        return (int)y1;
-    }
-
-    public int getX2() {
-        return (int)x2;
-    }
-
-    public int getY2() {
-        return (int)y2;
-    }
-
-    public int getX3() {
-        return (int)x3;
-    }
-
-    public int getY3() {
-        return (int)y3;
-    }
-
-    public int getX4() {
-        return (int)x4;
-    }
-
-    public int getY4() {
-        return (int)y4;
-    }
-
-    public Vector getNormal() {
-        return normal;
+    public double[] getYPoints() {
+        return yPoints;
     }
 
     public Vector collides(double x, double y) {
@@ -101,24 +63,17 @@ public class HoleSegment {
         double rotX = (Math.cos(-rotation) * (x - first.getX()) - Math.sin(-rotation) * (y - first.getY())) + first.getX();
         double rotY = (Math.sin(-rotation) * (x - first.getX()) + Math.cos(-rotation) * (y - first.getY())) + first.getY();
 
-        // To the left
-        if (rotX < first.getX()) {
-            return new Vector(first.getX(), y);
-        }
+        if (rotX > first.getX() && rotX < first.getX() + length) {
 
-        // To the right
-        if (rotX > first.getX() + length) {
-            return new Vector(first.getX() + length, y);
-        }
+            // Top
+            if (rotY < first.getY() - thickness) {
+                return new Vector(x, first.getY() - thickness);
+            }
 
-        // Top
-        if (rotY < first.getY() - thickness) {
-            return new Vector(x, y1);
-        }
-
-        // Bottom
-        if (rotY > first.getY() + thickness) {
-            return new Vector(x, y3);
+            // Bottom
+            if (rotY > first.getY() + thickness) {
+                return new Vector(x, first.getY() + thickness);
+            }
         }
 
         return null;

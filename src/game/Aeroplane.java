@@ -238,10 +238,10 @@ public class Aeroplane {
     }
 
     private void adjustToTerrain(CollisionPoint pointOfCollision) {
-        this.x = pointOfCollision.getIntersection().getX() + pointOfCollision.getIntersectingSegment().getNormal().getX() * 0 -
+       /* this.x = pointOfCollision.getIntersection().getX() + pointOfCollision.getIntersectingSegment().getNormal().getX() * 0 -
             pointOfCollision.offsetX * Math.cos(rotation) + pointOfCollision.offsetY * Math.sin(rotation);
         this.y = pointOfCollision.getIntersection().getY() + pointOfCollision.getIntersectingSegment().getNormal().getY() * 0 -
-            pointOfCollision.offsetX * Math.sin(rotation) - pointOfCollision.offsetY * Math.cos(rotation);
+            pointOfCollision.offsetX * Math.sin(rotation) - pointOfCollision.offsetY * Math.cos(rotation);*/
     }
 
     private double getPI(double radians) {
