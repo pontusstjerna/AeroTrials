@@ -72,7 +72,15 @@ public class World {
         }*/
 
         for (CollisionPoint cp : aeroplane.getCollisionPoints()) {
+            Vector maybeIntersection = null;
             for (HoleSegment hole : tunnel) {
+                maybeIntersection = hole.collides(cp.getX(), cp.getY());
+
+                // No collision, we're inside at least one hole
+                if (maybeIntersection == null) {
+                    cp.setCollision(null);
+                    break;
+                }
                 /*Vector maybeIntersection = hole.intersects(cp.getX(), cp.getY(), Math.max(cp.getRadius(), aeroplane.getSpeed() * 0.1));
                 if (maybeIntersection != null) {
                     cp.setCollision(maybeIntersection, segment);
@@ -81,6 +89,8 @@ public class World {
                     cp.setCollision(null, null);
                 }*/
             }
+
+            cp.setCollision(maybeIntersection);
         }
     }
 
@@ -110,7 +120,7 @@ public class World {
         HoleSegment last = tunnel.get(tunnel.size() - 1);
         int newHeight = 400 - random.nextInt(800);
         tunnel.add(new HoleSegment(
-                last.getSnd().getFloorX() - 200,
+                last.getSnd().getFloorX() - 150,
                 last.getSnd().getFloorY(),
                 last.getSnd().getFloorX() + newLength,
                 last.getSnd().getFloorY() - newHeight,

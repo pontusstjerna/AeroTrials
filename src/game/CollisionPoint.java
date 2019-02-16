@@ -51,6 +51,10 @@ public class CollisionPoint {
         this.segment = segment;
     }
 
+    public void setCollision(Vector collision) {
+        this.intersection = collision;
+    }
+
     public Vector getIntersection() {
         return intersection;
     }

@@ -29,7 +29,7 @@ public class Aeroplane {
 
     private double x,y;
     private Vector acceleration;
-    private Vector velocity; // m/s
+    private Vector velocity ; // m/s
     private double rotation = 0;
     private double torque = 0; // rads / sec
     private double throttle; // between 0 and 1
@@ -42,7 +42,7 @@ public class Aeroplane {
         this.x = x;
         this.y = y;
         acceleration = new Vector(0, -100);
-        velocity = new Vector(0, 0);
+        velocity = new Vector(20, 0);
 
         collisionPoints = new CollisionPoint[] {
                 new CollisionPoint(202, 102, CollisionPoint.POINTS.WHEEL_MAIN, 5).update(x, y, 0),
@@ -166,12 +166,17 @@ public class Aeroplane {
     private void checkCollisions() {
         // TODO: Implement this more seriously
 
+        if (UI.DEV_MODE) {
+            return;
+        }
+
         for (CollisionPoint cp : collisionPoints) {
             if (cp.isColliding()) {
-                Vector slopeNormal = cp.getIntersectingSegment().getNormal().getUnitVector();
-                double normalForceLength = Vector.dot(velocity, slopeNormal);
 
-                if (!isCrashed() && !UI.DEV_MODE) {
+                Vector collisionCorrection = new Vector(cp.getX(), cp.getY()).sub(cp.getIntersection());
+                double normalForceLength = collisionCorrection.getLength();
+
+                if (!isCrashed()) {
                     if (!cp.point.toString().contains("WHEEL") && cp.point != CollisionPoint.POINTS.PROP_BOTTOM) {
                         crash = new Crash((int)(x / World.ONE_METER), Crash.Types.CRASH);
                     } else if (-normalForceLength > MIN_CRASH_VELOCITY) {
@@ -180,7 +185,7 @@ public class Aeroplane {
                 }
 
                 if (normalForceLength < 0) {
-                    velocity.add(slopeNormal.mul(-normalForceLength));
+                    velocity.add(collisionCorrection.mul(-normalForceLength));
                 }
 
              //   adjustToTerrain(cp);
