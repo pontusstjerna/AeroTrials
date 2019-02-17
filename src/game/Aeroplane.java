@@ -4,7 +4,6 @@ import render.UI;
 import util.Vector;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by Pontus on 2017-12-06.
@@ -22,7 +21,6 @@ public class Aeroplane {
     private final double GRAVITY = 9.81 * 10;
     private final double ANGULAR_DRAG = 1;
     private final int MIN_ENGINE_START_SPEED = 2;
-    private final int MIN_CRASH_VELOCITY = 20;
 
 
     private final CollisionPoint[] collisionPoints;
@@ -164,51 +162,16 @@ public class Aeroplane {
     }
 
     private void checkCollisions() {
-        // TODO: Implement this more seriously
-
         if (UI.DEV_MODE) {
             return;
         }
 
         for (CollisionPoint cp : collisionPoints) {
             if (cp.isColliding()) {
-
-                Vector collisionCorrection = new Vector(cp.getX(), cp.getY()).sub(cp.getIntersection());
-                double normalForceLength = collisionCorrection.getLength();
-
                 if (!isCrashed()) {
-                    if (!cp.point.toString().contains("WHEEL") && cp.point != CollisionPoint.POINTS.PROP_BOTTOM) {
-                        crash = new Crash((int)(x / World.ONE_METER), Crash.Types.CRASH);
-                    } else if (-normalForceLength > MIN_CRASH_VELOCITY) {
-                        crash = new Crash((int)(x / World.ONE_METER), Crash.Types.HARD_LANDING);
-                    }
-                }
-
-                if (normalForceLength < 0) {
-                    velocity.add(collisionCorrection.mul(-normalForceLength));
-                }
-
-             //   adjustToTerrain(cp);
-
-                if (cp.point.toString().contains("PROP")) {
-                    engineRunning = false;
+                    crash = new Crash((int)(x / World.ONE_METER), Crash.Types.CRASH);
                 }
             }
-        }
-
-        if (collisionPoints[0].isColliding() && collisionPoints[1].isColliding()) {
-            torque = 0;
-
-        } else if (collisionPoints[0].isColliding()) {
-            if (torque > 0) {
-                torque = 0;
-            }
-            torque -= 0.91 * 0.0002;
-        } else if (collisionPoints[1].isColliding()) {
-            if (torque < 0) {
-                torque = 0;
-            }
-            torque += 0.91 * 0.005;
         }
     }
 
@@ -235,13 +198,6 @@ public class Aeroplane {
         final double F_D = 0.5 * p * v * v * C_D * A * dTime;
         Vector airResistance = velocity.getUnitVector().mul(-F_D);
         velocity.add(airResistance);
-    }
-
-    private void adjustToTerrain(CollisionPoint pointOfCollision) {
-       /* this.x = pointOfCollision.getIntersection().getX() + pointOfCollision.getIntersectingSegment().getNormal().getX() * 0 -
-            pointOfCollision.offsetX * Math.cos(rotation) + pointOfCollision.offsetY * Math.sin(rotation);
-        this.y = pointOfCollision.getIntersection().getY() + pointOfCollision.getIntersectingSegment().getNormal().getY() * 0 -
-            pointOfCollision.offsetX * Math.sin(rotation) - pointOfCollision.offsetY * Math.cos(rotation);*/
     }
 
     private double getPI(double radians) {

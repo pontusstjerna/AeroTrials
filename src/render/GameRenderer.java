@@ -47,7 +47,7 @@ public class GameRenderer {
 
     public void render(Graphics2D g, World world) {
         renderBackground(g, world.getAeroplane());
-        renderTerrain(g, world);
+        renderTunnel(g, world);
         renderAeroplane(g, world.getAeroplane());
         renderSmoke(g, world.getAeroplane());
 
@@ -81,6 +81,9 @@ public class GameRenderer {
                     0,
                     surface);
         }
+
+//        g.setColor(new Color(Math.min((int)aeroplane.getX() / 100, 255), 140, Math.max(0, 255 - (int)aeroplane.getX() / 100)));
+  //      g.fillRect(0, 0, WIDTH, HEIGHT);
     }
 
     private void renderAeroplane(Graphics2D g, Aeroplane aeroplane) {
@@ -113,8 +116,8 @@ public class GameRenderer {
                 (int)(planeY + aeroplane.getVelocity().getY() * scale));
     }
 
-    private void renderTerrain(Graphics2D g, World world) {
-        g.setColor(new Color(16,16,16));
+    private void renderTunnel(Graphics2D g, World world) {
+        g.setColor(new Color(16,16,16, 123));
         Aeroplane aeroplane = world.getAeroplane();
         for (HoleSegment segment : world.getTunnel()) {
             double[] segXPoints = segment.getXPoints();

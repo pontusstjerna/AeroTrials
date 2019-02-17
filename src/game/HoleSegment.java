@@ -49,6 +49,10 @@ public class HoleSegment {
         return snd;
     }
 
+    public Vector getSlope() {
+        return slope;
+    }
+
     public double[] getXPoints() {
         return xPoints;
     }

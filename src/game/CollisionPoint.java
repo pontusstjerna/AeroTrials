@@ -16,7 +16,8 @@ public class CollisionPoint {
         PROP_BOTTOM
     }
 
-    private Vector intersection;
+    private Vector collision;
+    private HoleSegment segment = null;
     private double x,y;
 
     public CollisionPoint(int offsetX, int offsetY, POINTS point, double radius) {
@@ -41,15 +42,16 @@ public class CollisionPoint {
         return y;
     }
 
-    public void setCollision(Vector collision) {
-        this.intersection = collision;
+    public void setCollision(Vector collision, HoleSegment segment) {
+        this.collision = collision;
+        this.segment = segment;
     }
 
-    public Vector getIntersection() {
-        return intersection;
+    public void setCollision(Vector collision) {
+        this.collision = collision;
     }
 
     public boolean isColliding() {
-        return intersection != null;
+        return collision != null;
     }
 }
