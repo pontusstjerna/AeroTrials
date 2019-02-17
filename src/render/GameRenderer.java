@@ -15,7 +15,7 @@ import static render.Renderer.WIDTH;
  * Created by Pontus on 2017-12-31.
  */
 public class GameRenderer {
-    private final int NR_FRAMES = 21;
+    private final int NR_FRAMES = 1; //21;
 
     private JPanel surface;
 
@@ -36,7 +36,7 @@ public class GameRenderer {
 
     public void loadImages() {
         aeroplaneImages = new BufferedImage[NR_FRAMES];
-        BufferedImage spriteSheet = ImageHandler.loadImage("aeroplane_anim");
+        BufferedImage spriteSheet = ImageHandler.loadImage("aeroplane_pixel_static_big");
         for (int i = 0; i < NR_FRAMES; i++) {
             aeroplaneImages[i] = ImageHandler.scaleImage(
                     ImageHandler.cutImage(spriteSheet, 0, i, Aeroplane.WIDTH, Aeroplane.HEIGHT), scale);
@@ -82,8 +82,10 @@ public class GameRenderer {
                     surface);
         }
 
+        // TODO: Background idea! Start with black and go to blue/white and always have clouds in background - maybe lowfi or sumtin?
+
 //        g.setColor(new Color(Math.min((int)aeroplane.getX() / 100, 255), 140, Math.max(0, 255 - (int)aeroplane.getX() / 100)));
-  //      g.fillRect(0, 0, WIDTH, HEIGHT);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
     }
 
     private void renderAeroplane(Graphics2D g, Aeroplane aeroplane) {
