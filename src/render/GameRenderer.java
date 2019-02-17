@@ -14,6 +14,9 @@ import static render.Renderer.WIDTH;
 /**
  * Created by Pontus on 2017-12-31.
  */
+
+// COLOR PALETTE: https://www.color-hex.com/color-palette/71577
+
 public class GameRenderer {
     private final int NR_FRAMES = 1; //21;
 
@@ -68,6 +71,9 @@ public class GameRenderer {
     }
 
     private void renderBackground(Graphics2D g, Aeroplane aeroplane) {
+        g.setColor(new Color(152, 209, 230));
+        g.fillRect(0, 0, WIDTH, HEIGHT);
+
         double x = (-aeroplane.getX()) * scale * 0.333;
         double renderedWidth = background.getWidth() * scale;
         g.drawImage(background,
@@ -85,7 +91,6 @@ public class GameRenderer {
         // TODO: Background idea! Start with black and go to blue/white and always have clouds in background - maybe lowfi or sumtin?
 
 //        g.setColor(new Color(Math.min((int)aeroplane.getX() / 100, 255), 140, Math.max(0, 255 - (int)aeroplane.getX() / 100)));
-        g.fillRect(0, 0, WIDTH, HEIGHT);
     }
 
     private void renderAeroplane(Graphics2D g, Aeroplane aeroplane) {
@@ -119,7 +124,7 @@ public class GameRenderer {
     }
 
     private void renderTunnel(Graphics2D g, World world) {
-        g.setColor(new Color(32,32,32, 255));
+        g.setColor(new Color(39,144,176, 64 ));
         Aeroplane aeroplane = world.getAeroplane();
         for (HoleSegment segment : world.getTunnel()) {
 

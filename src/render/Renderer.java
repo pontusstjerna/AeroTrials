@@ -96,14 +96,20 @@ public class Renderer {
     }
 
     private void configGraphics(Graphics2D g) {
-        RenderingHints rh = new RenderingHints(
+        g.setRenderingHints(new RenderingHints(
                 RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        RenderingHints rh2 = new RenderingHints(
+                RenderingHints.VALUE_ANTIALIAS_ON));
+        g.setRenderingHints(new RenderingHints(
                 RenderingHints.KEY_INTERPOLATION,
-                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.setRenderingHints(rh);
-        g.setRenderingHints(rh2);
+                RenderingHints.VALUE_INTERPOLATION_BILINEAR));
+        g.setRenderingHints(new RenderingHints(
+                RenderingHints.KEY_RENDERING,
+                RenderingHints.VALUE_RENDER_QUALITY
+        ));
+        g.setRenderingHints(new RenderingHints(
+                RenderingHints.KEY_DITHERING,
+                RenderingHints.VALUE_DITHER_ENABLE
+        ));
     }
 
     private void loadImages() {
