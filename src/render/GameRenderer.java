@@ -117,24 +117,18 @@ public class GameRenderer {
     }
 
     private void renderTunnel(Graphics2D g, World world) {
-        g.setColor(new Color(16,16,16, 123));
+        g.setColor(new Color(32,32,32, 255));
         Aeroplane aeroplane = world.getAeroplane();
         for (HoleSegment segment : world.getTunnel()) {
-            double[] segXPoints = segment.getXPoints();
-            double[] segYPoints = segment.getYPoints();
 
-            int[] xPoints = new int[segXPoints.length];
-            int[] yPoints = new int[segYPoints.length];
+            int x = (int)((segment.getFirst().getX() - aeroplane.getX()) * scale + planeX);
+            int y = (int)((segment.getFirst().getY() - aeroplane.getY()) * scale + planeY);
+            int topX = (int)((segment.getFirst().getX() - aeroplane.getX()) * scale + planeX);
+            int topY = (int)((segment.getFirst().getY() - segment.getThickness() - aeroplane.getY()) * scale + planeY);
 
-            for (int i = 0; i < xPoints.length; i++) {
-                xPoints[i] = (int)((segXPoints[i] - aeroplane.getX()) * scale + planeX);
-            }
-
-            for (int i = 0; i < yPoints.length; i++) {
-                yPoints[i] = (int)((segYPoints[i] - aeroplane.getY()) * scale + planeY);
-            }
-
-            g.fillPolygon(xPoints, yPoints, xPoints.length);
+            g.rotate(segment.getRotation(), x, y);
+            g.fillRect(topX, topY, (int)(segment.getLength() * scale), (int)(segment.getThickness() * 2 * scale));
+            g.rotate(-segment.getRotation(), x, y);
         }
     }
 

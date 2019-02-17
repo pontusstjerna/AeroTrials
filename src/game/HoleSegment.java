@@ -11,10 +11,6 @@ public class HoleSegment {
 
     private int thickness;
 
-    // Top left, top right, bottom right, bottom left (like CSS)
-    private double[] xPoints = new double[4];
-    private double[] yPoints = new double[4];
-
     private double rotation;
 
     public HoleSegment(int x1, int y1, int x2, int y2, int thickness) {
@@ -30,15 +26,6 @@ public class HoleSegment {
         this.thickness = thickness;
 
         this.rotation = Math.atan2(slope.getY(), slope.getX());
-
-        xPoints[0] = x1 - normal.getX() * thickness;
-        yPoints[0] = y1 + normal.getY() * thickness;
-        xPoints[1] = xPoints[0] + vector.getX();
-        yPoints[1] = yPoints[0] + vector.getY();
-        xPoints[2] = xPoints[1] + normal.getX() * thickness * 2;
-        yPoints[2] = yPoints[1] - normal.getY() * thickness * 2;
-        xPoints[3] = xPoints[2] - vector.getX();
-        yPoints[3] = yPoints[2] - vector.getY();
     }
 
     public Vector getFirst() {
@@ -53,12 +40,16 @@ public class HoleSegment {
         return slope;
     }
 
-    public double[] getXPoints() {
-        return xPoints;
+    public double getThickness() {
+        return thickness;
     }
 
-    public double[] getYPoints() {
-        return yPoints;
+    public double getLength() {
+        return length;
+    }
+
+    public double getRotation() {
+        return rotation;
     }
 
     public Vector collides(double x, double y) {
