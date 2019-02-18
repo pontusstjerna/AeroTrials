@@ -16,9 +16,8 @@ public class CollisionPoint {
         PROP_BOTTOM
     }
 
-    private Vector collision;
-    private HoleSegment segment = null;
     private double x,y;
+    private boolean colliding = false;
 
     public CollisionPoint(int offsetX, int offsetY, POINTS point, double radius) {
         this.offsetX = offsetX - Aeroplane.CG_X;
@@ -42,16 +41,11 @@ public class CollisionPoint {
         return y;
     }
 
-    public void setCollision(Vector collision, HoleSegment segment) {
-        this.collision = collision;
-        this.segment = segment;
-    }
-
-    public void setCollision(Vector collision) {
-        this.collision = collision;
+    public void setCollision(boolean colliding) {
+        this.colliding = colliding;
     }
 
     public boolean isColliding() {
-        return collision != null;
+        return colliding;
     }
 }

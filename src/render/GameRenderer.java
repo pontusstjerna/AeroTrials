@@ -126,16 +126,42 @@ public class GameRenderer {
     private void renderTunnel(Graphics2D g, World world) {
         g.setColor(new Color(39,144,176, 64 ));
         Aeroplane aeroplane = world.getAeroplane();
-        for (HoleSegment segment : world.getTunnel()) {
+        for (TunnelSegment segment : world.getTunnel()) {
 
-            int x = (int)((segment.getFirst().getX() - aeroplane.getX()) * scale + planeX);
-            int y = (int)((segment.getFirst().getY() - aeroplane.getY()) * scale + planeY);
-            int topX = (int)((segment.getFirst().getX() - aeroplane.getX()) * scale + planeX);
-            int topY = (int)((segment.getFirst().getY() - segment.getThickness() - aeroplane.getY()) * scale + planeY);
+            g.setStroke(new BasicStroke((int)(segment.getFirst().getStroke() * scale)));
 
-            g.rotate(segment.getRotation(), x, y);
-            g.fillRect(topX, topY, (int)(segment.getLength() * scale), (int)(segment.getThickness() * 2 * scale));
-            g.rotate(-segment.getRotation(), x, y);
+            g.drawLine(
+                    (int)((segment.getFirst().getX() - aeroplane.getX()) * scale + planeX),
+                    (int)((segment.getFirst().getY() - aeroplane.getY()) * scale + planeY),
+                    (int)((segment.getLast().getX() - aeroplane.getX()) * scale + planeX),
+                    (int)((segment.getLast().getY() - aeroplane.getY()) * scale + planeY)
+            );
+
+            if (UI.DEV_MODE) {
+                for (TunnelPoint point : segment.getPoints()) {
+                    g.setColor(Color.cyan);
+                    g.fillRoundRect(
+                            (int)((point.getX() - aeroplane.getX()) * scale + planeX - 5),
+                            (int)((point.getY() - aeroplane.getY()) * scale + planeY - 5),
+                            10, 10, 10, 10);
+                }
+
+                TunnelPoint closest = segment.getClosestPoint(aeroplane.getX(), aeroplane.getY());
+                g.setColor(Color.RED);
+                g.fillRoundRect(
+                        (int)((closest.getX() - aeroplane.getX()) * scale + planeX - 5),
+                        (int)((closest.getY() - aeroplane.getY()) * scale + planeY - 5),
+                        20, 20, 20, 20);
+
+                if (segment.isWithinX(aeroplane.getX())) {
+                    g.drawLine(
+                            (int)((closest.getX() - aeroplane.getX()) * scale + planeX),
+                            (int)((closest.getY() - aeroplane.getY()) * scale + planeY),
+                            (int)planeX,
+                            (int)planeY
+                    );
+                }
+            }
         }
     }
 
