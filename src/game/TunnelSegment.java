@@ -18,8 +18,11 @@ public class TunnelSegment {
         x += resx;
         y += resy;
 
+        double initStroke = first.getStroke();
+        double resstroke = (last.getStroke() - first.getStroke()) / points.length;
+
         for(int i = 1; i < points.length; i++) {
-            points[i] = new TunnelPoint(x, y, points[i - 1], 200);
+            points[i] = new TunnelPoint(x, y, points[i - 1], initStroke + (i * resstroke));
             x += resx;
             y += resy;
         }
@@ -60,6 +63,6 @@ public class TunnelSegment {
 
         TunnelPoint closest = getClosestPoint(x,y);
 
-        return closest.getDistance(x,y) < closest.getStroke();
+        return closest.getDistance(x,y) < closest.getStroke() / 2;
     }
 }

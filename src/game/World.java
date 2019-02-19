@@ -12,9 +12,9 @@ public class World {
 
     private final int WIDTH = 1920;
     private final int HEIGHT = 1080;
-    private final double DIFFICULTY = 0.01;
-    private final int INIT_CLEARANCE = 600;
-    private final int MIN_CLEARANCE = 100;
+    private final double DIFFICULTY = 50;
+    private final int INIT_CLEARANCE = 1000;
+    private final int MIN_CLEARANCE = 200;
     private final int INIT_HEIGHT = HEIGHT - 102;
     private final int RESOLUTION = 100;
 
@@ -57,7 +57,7 @@ public class World {
                     break;
                 }
             }
-            cp.setCollision(false);
+            cp.setCollision(!colliding);
         }
     }
 
@@ -68,8 +68,13 @@ public class World {
     private void generateTunnel() {
         int newLength = 2500;
         TunnelSegment previous = tunnel.get(tunnel.size() - 1);
-        int newHeight = 600 - random.nextInt(900);
-        TunnelPoint newEnd = new TunnelPoint(previous.getLast().getX() + newLength, previous.getLast().getY() - newHeight, previous.getLast(), 0);
+        int newHeight = 600 - random.nextInt(1200);
+        TunnelPoint newEnd = new TunnelPoint(
+                previous.getLast().getX() + newLength,
+                previous.getLast().getY() - newHeight,
+                previous.getLast(),
+                Math.max(previous.getLast().getStroke() - DIFFICULTY, MIN_CLEARANCE)
+        );
         tunnel.add(new TunnelSegment(
                 previous.getLast(),
                 newEnd,
@@ -79,8 +84,8 @@ public class World {
 
     private void createGround() {
         tunnel.add(new TunnelSegment(
-                new TunnelPoint(0, HEIGHT - 50, 0, HEIGHT),
-                new TunnelPoint(WIDTH, HEIGHT - 50, 0, HEIGHT),
+                new TunnelPoint(0, HEIGHT - 50, 0, INIT_CLEARANCE),
+                new TunnelPoint(WIDTH, HEIGHT - 50, 0, INIT_CLEARANCE),
                 RESOLUTION
         ));
         for (int i = 0; i < 15; i++) {

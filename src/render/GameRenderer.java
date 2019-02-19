@@ -124,10 +124,12 @@ public class GameRenderer {
     }
 
     private void renderTunnel(Graphics2D g, World world) {
-        g.setColor(new Color(39,144,176, 64 ));
+        Color blue = new Color(39,144,176, 64 );
+        Color red = Color.RED;
         Aeroplane aeroplane = world.getAeroplane();
         for (TunnelSegment segment : world.getTunnel()) {
 
+            g.setColor(blue);
             g.setStroke(new BasicStroke((int)(segment.getFirst().getStroke() * scale)));
 
             g.drawLine(
@@ -153,6 +155,7 @@ public class GameRenderer {
                         (int)((closest.getY() - aeroplane.getY()) * scale + planeY - 5),
                         20, 20, 20, 20);
 
+                g.setStroke(new BasicStroke(1));
                 if (segment.isWithinX(aeroplane.getX())) {
                     g.drawLine(
                             (int)((closest.getX() - aeroplane.getX()) * scale + planeX),
