@@ -39,8 +39,8 @@ public class Aeroplane {
     public Aeroplane(int x, int y) {
         this.x = x;
         this.y = y;
-        acceleration = new Vector(200, -100);
-        velocity = new Vector(100, 0);
+        acceleration = new Vector(100, -100);
+        velocity = new Vector(50, 0);
 
         collisionPoints = new CollisionPoint[] {
                 new CollisionPoint(202, 102, CollisionPoint.POINTS.WHEEL_MAIN, 5).update(x, y, 0),

@@ -130,7 +130,12 @@ public class GameRenderer {
         for (TunnelSegment segment : world.getTunnel()) {
 
             g.setColor(blue);
-            g.setStroke(new BasicStroke((int)(segment.getFirst().getStroke() * scale)));
+            BasicStroke stroke = new BasicStroke(
+                    (int)(segment.getFirst().getStroke() * scale),
+                    BasicStroke.CAP_BUTT,
+                    BasicStroke.JOIN_MITER
+            );
+            g.setStroke(stroke);
 
             g.drawLine(
                     (int)((segment.getFirst().getX() - aeroplane.getX()) * scale + planeX),
