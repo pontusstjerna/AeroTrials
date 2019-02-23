@@ -36,9 +36,9 @@ public class MainMenu implements Menu {
     private double scale;
 
     private int selection = 0;
-    private Color selectionColor = new Color(150,0,0);
-    private Color textColor = new Color(16,16,16);
-    private Color selectionBackgroundColor = new Color(0,0,0, 80);
+    private Color selectionColor = new Color(78,77,74);
+    private Color textColor = new Color(78,77,74);
+    private Color selectionBackgroundColor = new Color(144,179,141);
     private Font selectionFont;
 
     public MainMenu(JFrame frame, EventListener eventListener, Highscores highscores) {
@@ -75,7 +75,7 @@ public class MainMenu implements Menu {
 
         images.put("main_menu", ImageHandler.scaleImage(background, scale));
         images.put("highscore", ImageHandler.scaleImage(ImageHandler.loadImage("UI/highscore"), scale));
-        selectionFont = new Font("Quartz", Font.PLAIN, (int)(56 * scale));
+        selectionFont = new Font("Helvetica", Font.BOLD, (int)(56 * scale));
     }
 
     public void render(Graphics2D g) {

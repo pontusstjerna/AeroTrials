@@ -38,8 +38,8 @@ public class UI {
         this.eventListener = eventListener;
         this.highscores = highscores;
 
-        scoreFont = new Font("Quartz", Font.PLAIN, 25);
-        descriptionFont = new Font("Quartz", Font.PLAIN, 16);
+        scoreFont = new Font("Helvetica", Font.PLAIN, 25);
+        descriptionFont = new Font("Helvetica", Font.PLAIN, 16);
         textColor = new Color(180,0,0);
     }
 
