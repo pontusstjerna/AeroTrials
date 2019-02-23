@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Pontus on 2017-12-06.
  */
 public class Aeroplane {
-    public static final int WIDTH = 274;
+    public static final int WIDTH = 289;
     public static final int HEIGHT = 102;
     public static final int CG_X = 187;
     public static final int CG_Y = 56;

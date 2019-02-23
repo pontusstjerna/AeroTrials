@@ -11,11 +11,11 @@ import java.util.Random;
  * Created by Pontus on 2017-12-31.
  */
 public class SmokeSystem {
-    final static int SPREAD = 30;
+    final static int SPREAD = 50;
 
     private final int OFFSET_X, OFFSET_Y;
-    private final double AMOUNT = 4;
-    private final int BASE_VELOCITY = 400;
+    private final double AMOUNT = 100;
+    private final int BASE_VELOCITY = 100;
 
     private List<SmokeParticle> smoke;
     private Random random;

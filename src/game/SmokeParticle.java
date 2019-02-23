@@ -24,7 +24,7 @@ public class SmokeParticle {
 
         acceleration = new Vector(0,0);
         this.random = random;
-        radius = random.nextInt(5) + 10;
+        radius = random.nextInt(5) + 6;
     }
 
     public void update(double dTime) {
