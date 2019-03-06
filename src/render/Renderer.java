@@ -20,7 +20,6 @@ public class Renderer {
     private JPanel gameSurface;
     private JFrame frame;
     private World world;
-    private MainMenu menu;
     private UI ui;
     private GameRenderer game;
     private Highscores highscores;
@@ -56,12 +55,10 @@ public class Renderer {
             //frame.setUndecorated(true);
         }
 
-        menu = new MainMenu(frame, eventListener, highscores);
         ui = new UI(gameSurface, scale, eventListener, highscores);
         game = new GameRenderer(gameSurface, scale);
 
         loadImages();
-        menu.start();
 
         frame.setVisible(true);
     }
@@ -76,7 +73,6 @@ public class Renderer {
     public void toMenu() {
         isMenu = true;
         frame.getContentPane().removeAll();
-        menu.start();
         frame.setVisible(true);
     }
 
@@ -114,7 +110,6 @@ public class Renderer {
 
     private void loadImages() {
         System.out.println("Loading images....");
-        menu.loadImages();
         game.loadImages();
         ui.loadImages();
         System.out.println("Images loaded!");

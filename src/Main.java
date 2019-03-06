@@ -1,5 +1,6 @@
 import game.World;
 import render.Renderer;
+import render.menu.newmenu.Menu;
 import util.EventListener;
 
 import javax.swing.*;
@@ -27,15 +28,20 @@ public class Main implements EventListener {
 
     @Override
     public void start() {
-        System.out.println("Starting game.");
-        renderer.start(new InputController(world, this), this);
-        timer = new Timer(5, (event) -> update());
+        System.out.println("Starting menu.");
+
+        new Menu(this).start();
+
+        //renderer.start(new InputController(world, this), this);
+        //timer = new Timer(5, (event) -> update());
     }
 
     @Override
     public void run() {
         System.out.println("Running game.");
         lastTime = System.currentTimeMillis();
+        renderer.start(new InputController(world, this), this);
+        timer = new Timer(5, (event) -> update());
         timer.start();
         renderer.run();
         isPaused = false;
